@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.MylessonMapper">
+    <resultMap id="orderMap2" type="com.jd.entity.Mylesson">
+        <result property="id" column="id"/>
+        <result property="lessonId" column="Lesson_Id"/>
+        <result property="userId" column="User_Id"/>
+        <result property="time" column="Time"/>
+        <result property="isFinish" column="Is_Finish"/>
+        <result property="expandedList" column="expanded_List"/>
+        <result property="durations" column="durations"/>
+        <result property="treeId" column="tree_id"/>
+        <association property="lesson" >
+            <result column="img" property="img" javaType="String"></result>
+            <result column="L_Name" property="lName" javaType="String"></result>
+        </association>
+        <association property="teacher">
+            <result column="T_Name" property="tName"></result>
+        </association>
+    </resultMap>
+    <select id="getMyLesson" resultMap="orderMap2">
+        select m.Id, m.Time, m.User_Id, m.Is_Finish,m.durations,m.expanded_List,m.Lesson_Id,m.tree_id, l.L_Name, l.Img,
+        l.teacher_id,t.T_Name
+        from mylesson as m
+        left join lesson as l on m.Lesson_Id = l.id
+        left join teacher t on l.teacher_id = t.Id
+        where m.User_Id=#{userId}
+    </select>
+
+    <update id="updateMyLessonByLessonId" parameterType="com.jd.entity.Mylesson">
+        UPDATE mylesson m SET m.durations=#{durations},
+        expanded_List=#{expandedList}
+        where Lesson_Id=#{lessonId}
+    </update>
+
+</mapper>
+

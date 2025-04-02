@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    ports:
+      - "9099:9099"
+    image: ${docker_url}
+    environment:
+      VERSION: ${BUILD_NUMBER}
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/study-online
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1Wxwhsndwy9
+      restart: always
+    command: [ "/bin/sh","-c","set -e && java -jar studyOnlinev3-0.0.1-SNAPSHOT.jar --server.port=9099 --spring.profiles.active=prod" ]
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: study-online
+      MYSQL_ROOT_PASSWORD: 1Wxwhsndwy9
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:

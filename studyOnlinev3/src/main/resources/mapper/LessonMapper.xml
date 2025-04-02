@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.LessonMapper">
+    <select id="selectCommentByUserName" resultType="com.jd.entity.Lesson">
+    select l.Id, l.L_Name, l.Lesson_Type_Id, l.User_Id,l. teacher_id, l.School, l.Time, l.Img,
+    l.Dian_Ji, l.Zan, l.Remark, t.T_Name
+    from lesson l left join teacher t on t.Id = l.teacher_id
+    where 1=1
+        <if test="name != null">
+            AND l.L_Name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="id != null">
+            and l.lesson_type_id = #{id}
+        </if>
+    </select>
+</mapper>

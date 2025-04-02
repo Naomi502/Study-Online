@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.ScoreMapper">
+    <resultMap id="orderMap3" type="com.jd.entity.Score">
+        <result property="id" column="id"/>
+        <result property="userId" column="User_Id"/>
+        <result property="time" column="Time"/>
+       <result property="score" column="Score"/>
+        <result property="status" column="status"/>
+        <association property="user" >
+            <result column="img" property="img" javaType="String"></result>
+            <result column="Login_Name" property="loginName" javaType="String"></result>
+        </association>
+    </resultMap>
+    <update id="updateMyScoreById" parameterType="com.jd.entity.Score">
+        UPDATE score  SET
+        score=#{score},status=#{status}
+        where user_Id=#{userId}
+    </update>
+    
+    <select id="getAllScore" resultMap="orderMap3">
+        select s.Id, s.Time, s.Score,s.User_Id ,u.Login_Name,  u.Img
+        from score as s
+        left join user as u on s.User_Id = u.id
+        order by s.Score desc
+    </select>
+
+    <select id="getMyScore" resultMap="orderMap3">
+        select s.Id, s.Time, s.Score, s.User_Id,s.status,u.Login_Name,  u.Img
+        from score as s
+        left join user as u on s.User_Id = u.id
+        where User_Id=#{userId}
+    </select>
+</mapper>

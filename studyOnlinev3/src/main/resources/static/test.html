@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>二维码生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="color"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #qrcode-image {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>二维码生成器</h1>
+    <form id="qrcodeForm">
+        <div class="form-group">
+            <label for="text">二维码内容：</label>
+            <input type="text" id="text" name="text" required>
+        </div>
+        <div class="form-group">
+            <label for="el">纠错级别：</label>
+            <input type="text" id="el" name="el" placeholder="L/M/Q/H">
+        </div>
+        <div class="form-group">
+            <label for="bgcolor">背景颜色：</label>
+            <input type="color" id="bgcolor" name="bgcolor" value="#FFFFFF">
+        </div>
+        <div class="form-group">
+            <label for="fgcolor">前景颜色：</label>
+            <input type="color" id="fgcolor" name="fgcolor" value="#000000">
+        </div>
+        <div class="form-group">
+            <label for="logo">Logo URL：</label>
+            <input type="text" id="logo" name="logo" placeholder="可选">
+        </div>
+        <div class="form-group">
+            <label for="w">宽度：</label>
+            <input type="number" id="w" name="w" min="100" max="500" value="300">
+        </div>
+        <div class="form-group">
+            <label for="m">边距：</label>
+            <input type="number" id="m" name="m" min="0" max="10" value="4">
+        </div>
+        <div class="form-group">
+            <label for="lw">容错率：</label>
+            <input type="number" id="lw" name="lw" min="0" max="10" value="4">
+        </div>
+        <div class="form-group">
+            <label for="type">类型：</label>
+            <input type="text" id="type" name="type" placeholder="可选">
+        </div>
+        <button type="submit">生成二维码</button>
+    </form>
+    <div id="qrcode-container">
+        <img id="qrcode-image" alt="生成的二维码">
+        <p id="status-message"></p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('qrcodeForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const params = Object.fromEntries(formData.entries());
+
+        fetch('/qrcode', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(params).toString()
+        })
+            .then(response => response.text())
+            .then(data => {
+                const imageUrl = data.trim();
+                document.getElementById('qrcode-image').src = imageUrl;
+                document.getElementById('status-message').textContent = '二维码生成成功！';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('status-message').textContent = '生成二维码失败，请检查参数！';
+            });
+    });
+</script>
+</body>
+</html>
