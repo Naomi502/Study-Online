@@ -9,7 +9,7 @@
           <ul class="footer-links">
             <li><a href="#"><i class="el-icon-document"></i>课程入驻</a></li>
             <li><a href="#"><i class="el-icon-office-building"></i>关于我们</a></li>
-            <li><a href="#"><i class="el-icon-research"></i>教科研平台</a></li>
+            <li><a href="#"><i class="el-icon-notebook-1"></i>教科研平台</a></li>
             <li><a @click="openNewLink"><i class="el-icon-notebook-2"></i>服务协议与隐私政策</a></li>
           </ul>
         </div>
