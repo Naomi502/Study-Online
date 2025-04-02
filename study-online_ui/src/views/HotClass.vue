@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="hot-class">
-            <span>热门课程</span>
+            <span>热门好课</span>
             <div class="header">
                 <span class="s1" v-for="item in tipList" :key="item.id" @click="ontip(item)"
                     :class="[{ active: activeName == item.name }]">{{ item.name }}</span>
