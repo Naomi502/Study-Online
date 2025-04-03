@@ -62,9 +62,13 @@ export default {
 }
 
 #particles-js {
-    width: 100%;
-    height: calc(100% - 100px);
-    position: absolute;
+  width: 100%;
+  height: 100%;
+  position: fixed; /* 改为fixed定位 */
+  top: 0;
+  left: 0;
+  z-index: 0; /* 设置最低层级 */
+  pointer-events: none; /* 关键：禁止粒子接受点击事件 */
 }
 
 .fade-enter-active,
