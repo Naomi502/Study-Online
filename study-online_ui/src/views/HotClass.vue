@@ -129,7 +129,7 @@ export default {
 <style lang="less" scoped>
 .hot-class {
   padding: 60px 5%;
-  max-width: 1600px;
+  max-width: 60%;
   margin: 0 auto;
   animation: load 0.4s linear;
   @keyframes load {

@@ -1,67 +1,67 @@
 <template>
-  <footer class="xt-footer">
-    <div class="footer-container">
-      <!-- 主要导航区块 -->
-      <div class="footer-main">
-        <!-- 左导航 -->
-        <div class="footer-column">
-          <h4 class="footer-title">快速导航</h4>
-          <ul class="footer-links">
-            <li><a href="#"><i class="el-icon-document"></i>课程入驻</a></li>
-            <li><a href="#"><i class="el-icon-office-building"></i>关于我们</a></li>
-            <li><a href="#"><i class="el-icon-notebook-1"></i>教科研平台</a></li>
-            <li><a @click="openNewLink"><i class="el-icon-notebook-2"></i>服务协议与隐私政策</a></li>
-          </ul>
-        </div>
-
-        <!-- 中导航 -->
-        <div class="footer-column">
-          <h4 class="footer-title">支持帮助</h4>
-          <ul class="footer-links">
-            <li><a href="#"><i class="el-icon-question"></i>帮助中心</a></li>
-            <li><a href="#"><i class="el-icon-chat-line-round"></i>在线客服</a></li>
-            <li><a href="#"><i class="el-icon-phone-outline"></i>联系我们</a></li>
-            <li><a target="_blank" href="http://124.223.101.11:8050/#/login"><i class="el-icon-monitor"></i>管理平台</a></li>
-          </ul>
-        </div>
-
-        <!-- 右信息 -->
-        <div class="footer-column">
-          <div class="footer-slogan">
-            <h3 class="slogan-main">创新教育 改变世界</h3>
-            <p class="slogan-sub">New Education, New World</p>
+    <footer class="xt-footer">
+      <div class="footer-container">
+        <!-- 主要导航区块 -->
+        <div class="footer-main">
+          <!-- 左导航 -->
+          <div class="footer-column">
+            <h4 class="footer-title">快速导航</h4>
+            <ul class="footer-links">
+              <li><a href="#"><i class="el-icon-document"></i>课程入驻</a></li>
+              <li><a href="#"><i class="el-icon-office-building"></i>关于我们</a></li>
+              <li><a href="#"><i class="el-icon-notebook-1"></i>教科研平台</a></li>
+              <li><a @click="openNewLink"><i class="el-icon-notebook-2"></i>服务协议与隐私政策</a></li>
+            </ul>
           </div>
-          <div class="footer-qrcode">
-            <img src="qrcode.png" alt="微信公众号">
-            <p>关注官方公众号</p>
+
+          <!-- 中导航 -->
+          <div class="footer-column">
+            <h4 class="footer-title">支持帮助</h4>
+            <ul class="footer-links">
+              <li><a href="#"><i class="el-icon-question"></i>帮助中心</a></li>
+              <li><a href="#"><i class="el-icon-chat-line-round"></i>在线客服</a></li>
+              <li><a href="#"><i class="el-icon-phone-outline"></i>联系我们</a></li>
+              <li><a target="_blank" href="http://124.223.101.11:8050/#/login"><i class="el-icon-monitor"></i>管理平台</a></li>
+            </ul>
+          </div>
+
+          <!-- 右信息 -->
+          <div class="footer-column">
+            <div class="footer-slogan">
+              <h3 class="slogan-main">创新教育 改变世界</h3>
+              <p class="slogan-sub">New Education, New World</p>
+            </div>
+            <div class="footer-qrcode">
+              <img src="qrcode.png" alt="微信公众号">
+              <p>关注官方公众号</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 版权信息 -->
+        <div class="footer-bottom">
+          <div class="copyright">
+            <p>版权所有：扬州市职业大学（扬州开放大学） ©2024</p>
+            <div class="legal-links">
+              <span>苏ICP备13024625号-3</span>
+              <span>京公网安备 11010802033054号</span>
+              <span>苏公网安备32100302010583号</span>
+            </div>
+            <div class="address">
+              <i class="el-icon-location-outline"></i>扬州市邗江区文昌西路458号
+            </div>
+          </div>
+          <div class="security">
+            <img class="badge" src="security-badge.png" alt="安全认证">
           </div>
         </div>
       </div>
 
-      <!-- 版权信息 -->
-      <div class="footer-bottom">
-        <div class="copyright">
-          <p>版权所有：扬州市职业大学（扬州开放大学） ©2024</p>
-          <div class="legal-links">
-            <span>苏ICP备13024625号-3</span>
-            <span>京公网安备 11010802033054号</span>
-            <span>苏公网安备32100302010583号</span>
-          </div>
-          <div class="address">
-            <i class="el-icon-location-outline"></i>扬州市邗江区文昌西路458号
-          </div>
-        </div>
-        <div class="security">
-          <img class="badge" src="security-badge.png" alt="安全认证">
-        </div>
+      <!-- 返回顶部 -->
+      <div class="back-top" @click="scrollToTop">
+        <i class="el-icon-caret-top"></i>
       </div>
-    </div>
-
-    <!-- 返回顶部 -->
-    <div class="back-top" @click="scrollToTop">
-      <i class="el-icon-caret-top"></i>
-    </div>
-  </footer>
+    </footer>
 </template>
 
 <script>
@@ -82,15 +82,26 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
 .xt-footer {
   background: #2a2e32;
   color: #b1b1b1;
   padding: 40px 0 20px;
   position: relative;
   font-size: 14px;
+  will-change: transform, opacity; /* 性能优化 */
+  transform: translateY(100%); /* 初始位置在可视区域上方 */
+  animation: slideUp 1.2s ease forwards; /* 添加动画效果 */
 
   .footer-container {
-    max-width: 1200px;
+    max-width: 70%;
     margin: 0 auto;
     padding: 0 20px;
   }
@@ -104,7 +115,6 @@ export default {
   }
 
   .footer-column {
-
     .footer-title {
       color: #fff;
       font-size: 16px;
@@ -268,6 +278,8 @@ export default {
 
   @media (max-width: 768px) {
     padding: 30px 0 15px;
+    animation-duration: 0.4s;
+    transform: translateY(10px);
 
     .footer-main {
       grid-template-columns: 1fr;
@@ -285,6 +297,11 @@ export default {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;
+      }
+
+      .footer-slogan,
+      .footer-qrcode {
+        text-align: center;
       }
     }
 

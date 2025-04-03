@@ -285,44 +285,12 @@ export default {
 </script>
 
 <style scoped>
-.slide-fade-forward-enter-active,
-.slide-fade-forward-leave-active,
-.slide-fade-backward-enter-active,
-.slide-fade-backward-leave-active {
-  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-  position: absolute;
-  width: 100%;
-}
-/* 正向动画（进入答题） */
-.slide-fade-forward-enter {
-  opacity: 0;
-  transform: translateX(50px);
-}
-.slide-fade-forward-leave-to {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-/* 反向动画（返回统计） */
-.slide-fade-backward-enter {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-.slide-fade-backward-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
-}
-/* 调整容器定位 */
-.stats-container, .quiz-container {
-  position: relative;
-  min-height: calc(75vh - 120px); /* 根据header/footer高度调整 */
-}
-
 .quiz-page {
   width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f8fafc;
+  background: #ffffff;
 }
 
 /* 每日挑战样式 */

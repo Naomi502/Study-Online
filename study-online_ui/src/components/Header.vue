@@ -7,7 +7,7 @@
                 @select="handleSelect">
                 <el-menu-item index="1" @click="$router.push('/')">首页</el-menu-item>
                 <el-menu-item index="3" @click="goQuiz">每日十题</el-menu-item>
-                <el-menu-item index="2">专业技术</el-menu-item>
+                <el-menu-item index="2" @click="goShop">积分商城</el-menu-item>
                 <el-menu-item index="4">思政课程</el-menu-item>
                 <el-menu-item index="5">实践课程</el-menu-item>
                 <el-menu-item index="6" @click="goNews">新闻资讯</el-menu-item>
@@ -137,6 +137,10 @@ export default {
             this.$router.push('/quiz')
             this.activeIndex = '2'
         },
+        goShop() {
+            this.$router.push('/shop')
+            this.activeIndex = '3'
+        },
         goNews() {
             this.$router.push('/news')
             this.activeIndex = '6'
@@ -224,6 +228,9 @@ export default {
     position: fixed;
     top: 0;
     z-index: 1999;
+    border-bottom: 1px solid #ebeef5; /* 添加灰色边框 */
+    transform: translateY(-100%); /* 初始位置在可视区域上方 */
+    animation: slideDown 1.2s ease forwards; /* 添加动画效果 */
 
     .block {
         margin-top: 19px;
@@ -231,6 +238,15 @@ export default {
         right: 30px;
     }
 }
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 
 .el-menu.el-menu--horizontal {
     border: none;

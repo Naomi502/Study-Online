@@ -4,7 +4,7 @@
         <div class="content">
             <HotClass />
         </div>
-        <Footer v-show="footerShow" />
+        <Footer v-show="footerShow"/>
     </div>
 </template>
 
@@ -39,6 +39,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .home {
     width: 100%;
 
@@ -69,4 +70,5 @@ export default {
         // background-color: aqua;
     }
 }
+
 </style>
