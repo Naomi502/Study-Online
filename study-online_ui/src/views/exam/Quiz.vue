@@ -169,11 +169,11 @@ export default {
         streakDays: 7
       },
       leaderboard: [
-        { id: 1, name: '学霸小明', points: 3500 },
-        { id: 2, name: '学习委员小红', points: 2980 },
-        { id: 3, name: '进步之星小李', points: 2450 },
-        { id: 4, name: '新人小王', points: 1820 },
-        { id: 5, name: '坚持达人小张', points: 1560 }
+        { id: 1, name: '王立群', points: 3500 },
+        { id: 2, name: '张峰', points: 2980 },
+        { id: 3, name: '沈蓝翔', points: 2450 },
+        { id: 4, name: '李慧珊', points: 1820 },
+        { id: 5, name: '徐璐洁', points: 1560 }
       ],
       activeIndex: '3',
       footerShow: false,
@@ -210,6 +210,83 @@ export default {
           ],
           correctAnswer: 2,
           explanation: 'Composition API 主要解决了在复杂组件中逻辑关注点分散的问题，提供了更好的代码组织和复用能力。'
+        },
+        {
+          text: 'React 的 Context API 主要用于解决什么问题？',
+          options: [
+            '简化组件之间的通信',
+            '提高组件的渲染性能',
+            '减少组件的嵌套层级',
+            '增强组件的样式控制'
+          ],
+          correctAnswer: 3,
+          explanation: 'Context API 主要用于解决组件之间的样式控制问题，它可以让组件在不使用 props 的情况下共享数据。'
+        },
+        {
+          text: '以下哪个指令用于事件监听？',
+          options: [
+            'v-on',
+            'v-bind',
+            'v-model',
+            'v-text'
+          ],
+          correctAnswer: 4,
+          explanation: 'v-on 是 Vue 中用于事件监听的指令，它可以绑定 DOM 事件到组件的方法上。'
+        },
+        {
+          text: 'Vue 3 的响应式系统是如何实现的？',
+          options: [
+            '基于 Proxy',
+            '基于 Object.defineProperty',
+            '基于发布-订阅模式',
+            '基于观察者模式'
+          ],
+          correctAnswer:5,
+          explanation: 'Vue 3 的响应式系统是基于 Proxy 实现的，它可以拦截对象的读写操作，实现数据的响应式更新。'
+        },
+        {
+          text: '以下哪个指令用于双向绑定？',
+          options: [
+            'v-bind',
+            'v-model',
+            'v-on',
+            'v-for'
+          ],
+          correctAnswer: 6,
+          explanation: 'v-model 是 Vue 中用于双向绑定的指令，它可以将表单元素的值和组件的数据进行双向同步。'
+        },
+        {
+          text: 'CSS 中 Flexbox 布局的主要优势是什么？',
+          options: [
+            '方便地实现弹性布局',
+            '提高页面的加载速度',
+            '增强页面的响应式设计',
+            '减少 CSS 代码的编写量'
+          ],
+          correctAnswer: 7,
+          explanation: 'Flexbox 布局的主要优势是方便地实现弹性布局，它可以根据容器的大小自动调整子元素的大小和位置。'
+        },
+        {
+          text: '以下哪个指令用于条件渲染？',
+          options: [
+            'v-if',
+            'v-else',
+            'v-show',
+            'v-for'
+          ],
+          correctAnswer: 8,
+          explanation: 'v-if 是 Vue 中用于条件渲染的指令，它会根据表达式的真假值来添加或移除 DOM 元素。'
+        },
+        {
+          text: 'Git 中分支的主要作用是什么？',
+          options: [
+            '并行开发不同的功能',
+            '合并代码时减少冲突',
+            '提高代码的提交速度',
+            '管理代码的版本号'
+          ],
+          correctAnswer: 9,
+          explanation: '分支的主要作用是并行开发不同的功能，它可以让开发者在不影响主线代码的情况下进行工作。'
         }
       ],
       currentQuestionIndex: 0,
