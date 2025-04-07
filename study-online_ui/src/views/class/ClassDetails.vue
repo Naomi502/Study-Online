@@ -39,8 +39,8 @@
 <script>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import Video from '@/components/Video.vue';
-import Tree from '@/components/Tree.vue';
+import Video from '@/views/video/Video.vue';
+import Tree from '@/views/video/Tree.vue';
 import { getLessonDetail, getLessonTreeById } from '@/api/lesson.js'
 import { joinLesson, getMyLesson } from '@/api/myLesson.js'
 import { mapMutations } from 'vuex';

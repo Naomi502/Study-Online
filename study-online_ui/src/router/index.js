@@ -48,47 +48,47 @@ const routes = [
   {
     path: "/detail",
     name: "class-details",
-    component: () => import("@/views/ClassDetails.vue"),
+    component: () => import("@/views/class/ClassDetails.vue"),
   },
   {
     path: "/personal/:id",
     name: "personal-center",
-    component: () => import("@/views/PersonalCenter.vue"),
+    component: () => import("@/views/personal/PersonalCenter.vue"),
   },
   {
     path: "/lesson/:id",
     name: "lesson",
-    component: () => import("@/views/Lession.vue"),
+    component: () => import("@/views/class/Lession.vue"),
   },
   {
     path: "/Quiz",
     name: "quiz",
-    component: () => import("@/views/Quiz.vue"),
+    component: () => import("@/views/exam/Quiz.vue"),
   },
   {
     path: "/Shop",
     name: "shop",
-    component: () => import("@/views/Shop.vue"),
+    component: () => import("@/views/mall/Shop.vue"),
   },
   {
     path: "/news",
     name: "news-report",
-    component: () => import("@/views/NewsReport.vue"),
+    component: () => import("@/views/news/NewsReport.vue"),
   },
   {
     path: "/newDetail/:id",
     name: "new-detail",
-    component: () => import("@/views/NewDetail.vue"),
+    component: () => import("@/views/news/NewDetail.vue"),
   },
   {
     path: "/newsList",
     name: "news-list",
-    component: () => import("@/views/NewsList.vue"),
+    component: () => import("@/views/news/NewsList.vue"),
   },
   {
     path: "/searchLesson",
     name: "search-lesson",
-    component: () => import("@/views/SearchLesson.vue"),
+    component: () => import("@/views/class/SearchLesson.vue"),
   },
   {
     path: "/protocol",

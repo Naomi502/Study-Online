@@ -7,7 +7,7 @@
               :class="[{ active: activeName == item.name }]">{{ item.name }}</span>
       </div>
       <div style="display: flex; flex-wrap: wrap; margin: auto; justify-content: center">
-        <el-skeleton animated v-show="skeletonShow" style="width:300px; padding: 25px;" v-for="(item, index) in 8" :key="index">
+        <el-skeleton animated v-show="skeletonShow" style="width:250px; padding: 25px;" v-for="(item, index) in 8" :key="index">
           <template slot="template">
             <el-skeleton-item variant="image" style="width: 100%; height: 180px;" />
             <div style="padding: 14px;">
@@ -129,7 +129,7 @@ export default {
 <style lang="less" scoped>
 .hot-class {
   padding: 60px 5%;
-  max-width: 60%;
+  max-width: 80%;
   margin: 0 auto;
   animation: load 0.4s linear;
   @keyframes load {

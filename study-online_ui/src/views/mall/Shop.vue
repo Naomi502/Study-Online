@@ -27,8 +27,8 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import PrizeCard from '@/views/PrizeCard.vue'
-import AddressModal from '@/views/AddressModal.vue'
+import PrizeCard from '@/views/mall/PrizeCard.vue'
+import AddressModal from '@/views/mall/AddressModal.vue'
 import Footer from '@/components/Footer.vue'
 import { prizes } from '@/data/prizes.js'
 

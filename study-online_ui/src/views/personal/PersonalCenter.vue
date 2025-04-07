@@ -57,8 +57,8 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import PersonalData from "@/views/PersonalData.vue";
-import PersonalClass from "@/views/PersonalClass.vue";
+import PersonalData from "@/views/personal/PersonalData.vue";
+import PersonalClass from "@/views/personal/PersonalClass.vue";
 import PointsRanking from "./PointsRanking.vue";
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { getUserDetail, updateUser } from '@/api/user.js'

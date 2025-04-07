@@ -127,7 +127,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import Video from "@/components/Video.vue";
+import Video from "@/views/video/Video.vue";
 import { getLessonTreeById, getVideo } from '@/api/lesson.js'
 import { getComment, comment, like } from '@/api/comment.js'
 import { updateMyLesson } from '@/api/myLesson.js'

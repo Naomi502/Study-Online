@@ -11,7 +11,7 @@
 <script>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import HotClass from '@/views/HotClass.vue'
+import HotClass from '@/views/class/HotClass.vue'
 // @ is an alias to /src
 
 export default {
