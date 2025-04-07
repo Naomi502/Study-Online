@@ -8,7 +8,7 @@
       <div v-if="!showQuiz" key="stats" class="stats-container">
       <div class="daily-quiz-section">
         <div class="quiz-header">
-          <h2>📚 每日十题</h2>
+          <h2>📚 每日一百题</h2>
           <p class="quiz-intro">
             每日精选10道高质量编程题目，涵盖核心知识点，助你稳步提升开发能力。
             完成挑战可获得积分奖励，连续打卡解锁额外成就！
