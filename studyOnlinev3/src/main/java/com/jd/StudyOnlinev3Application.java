@@ -12,6 +12,7 @@ public class StudyOnlinev3Application {
 
     public static void main(String[] args) {
         SpringApplication.run(StudyOnlinev3Application.class, args);
+        System.out.println("启动成功~~");
     }
 
 }
