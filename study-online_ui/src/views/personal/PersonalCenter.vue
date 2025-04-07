@@ -47,6 +47,7 @@
                     <PersonalData v-show="selectId == 1" />
                     <PersonalClass v-show="selectId == 2" />
                     <PointsRanking v-show="selectId == 3" />
+                    <PersonalExchange v-show="selectId == 4" />
                 </div>
             </div>
         </div>
@@ -63,6 +64,7 @@ import PointsRanking from "./PointsRanking.vue";
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { getUserDetail, updateUser } from '@/api/user.js'
 import { getMyScore, updateMyScore, addScoreDetail } from '@/api/score.js'
+import PersonalExchange from "@/views/personal/PersonExchange.vue";
 export default {
     name: "StudyOnlinePersonalCenter",
     inject: ["reload"],
@@ -86,6 +88,11 @@ export default {
                 id: 3,
                 icon: "el-icon-medal",
             },
+            {
+                name: "积分兑换",
+                id: 4,
+                icon: "el-icon-goods",
+            },
             ],
             activeName: "个人资料",
             selectId: this.$route.params.id,
@@ -101,6 +108,7 @@ export default {
         };
     },
     components: {
+      PersonalExchange,
         Header,
         Footer,
         PersonalData,
