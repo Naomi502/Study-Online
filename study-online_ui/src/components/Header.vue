@@ -6,8 +6,8 @@
             <el-menu style="margin-top: 15px;" :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
                 @select="handleSelect">
                 <el-menu-item index="1" @click="$router.push('/')">首页</el-menu-item>
-                <el-menu-item index="3" @click="goQuiz">每日十题</el-menu-item>
-                <el-menu-item index="2" @click="goShop">积分商城</el-menu-item>
+                <el-menu-item index="2" @click="goQuiz">每日十题</el-menu-item>
+                <el-menu-item index="3" @click="goShop">积分商城</el-menu-item>
                 <el-menu-item index="4" >考试测试</el-menu-item>
                 <el-menu-item index="5">实践课程</el-menu-item>
                 <el-menu-item index="6" @click="goNews">新闻资讯</el-menu-item>

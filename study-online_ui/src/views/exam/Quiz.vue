@@ -1,6 +1,6 @@
 <template>
   <div class="quiz-page">
-    <Header :ai="activeIndex" />
+    <Header :ai="activeIndex = 2" />
 
     <!-- 添加页面过渡动画 -->
     <transition :name="transitionName" mode="out-in">
