@@ -1,19 +1,17 @@
 <template>
   <div class="app">
-    <Header :ai="activeIndex = 3" />
+    <Header :active-index="3" />
     <div class="container animated-container">
       <h2 class="section-title">积分商城</h2>
       <div class="prize-grid">
         <PrizeCard
             v-for="(prize, index) in prizes"
-            :key="index"
+            :key="prize.id || index"
             :prize="prize"
             @exchange="handleExchange"
         />
       </div>
-
     </div>
-
     <AddressModal
         :visible="showModal"
         :prize="selectedPrize"
@@ -22,7 +20,6 @@
     />
     <Footer/>
   </div>
-
 </template>
 
 <script>
@@ -33,7 +30,7 @@ import Footer from '@/components/Footer.vue'
 import { prizes } from '@/data/prizes.js'
 
 export default {
-  name: 'App',
+  name: 'IntegralMall',
   components: {
     Header,
     Footer,
@@ -42,8 +39,7 @@ export default {
   },
   data() {
     return {
-      labCount: Math.floor(Math.random() * 50) + 10, // 随机实验室数量10-60
-      prizes: prizes,
+      prizes: Array.isArray(prizes) ? prizes : [],
       showModal: false,
       selectedPrize: null
     }
@@ -56,10 +52,33 @@ export default {
     closeModal() {
       this.showModal = false;
     },
-    handleSubmit(formData) {
-      console.log('兑换信息:', formData);
-      alert(`兑换${formData.prize.name}成功!\n我们将尽快发货至:\n${formData.address}\n收货人: ${formData.name}\n电话: ${formData.phone}`);
-      this.closeModal();
+    async handleSubmit(formData) {
+      try {
+        const exchangeList = JSON.parse(localStorage.getItem('exchangeList')) || [];
+        const newExchangeItem = {
+          id: Date.now(),
+          name: formData.prize.name,
+          description: formData.prize.description,
+          image: formData.prize.image,
+          time: new Date().toLocaleString(),
+          status: 1,
+          addressInfo: {
+            name: formData.name,
+            phone: formData.phone,
+            address: formData.address
+          }
+        };
+
+        exchangeList.unshift(newExchangeItem);
+        localStorage.setItem('exchangeList', JSON.stringify(exchangeList));
+
+        this.$message.success(`兑换成功！商品将发货至：${formData.address}`);
+      } catch (error) {
+        console.error('兑换失败:', error);
+        this.$message.error('兑换失败，请稍后重试');
+      } finally {
+        this.closeModal();
+      }
     }
   }
 }
@@ -71,11 +90,13 @@ export default {
   background-color: #ffffff;
   position: relative;
 }
+
 .animated-container {
   animation: fadeInUp 0.8s ease-out;
   opacity: 0;
   animation-fill-mode: forwards;
 }
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -86,12 +107,11 @@ export default {
     transform: translateY(0);
   }
 }
+
 .container {
   position: relative;
   max-width: 1400px;
-  margin: 0px auto;
-  margin-bottom: 200px;
-  margin-top: 200px;
+  margin: 200px auto;
   padding: 20px;
 }
 
@@ -107,5 +127,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 50px;
+  padding: 20px 0;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div class="exchange-container">
     <h2 class="page-title">我的兑换</h2>
-
     <div class="exchange-list">
       <div class="exchange-card" v-for="(item, index) in exchangeList" :key="index">
         <div class="product-info">
@@ -12,7 +11,6 @@
             <p class="exchange-time">兑换时间: {{ item.time }}</p>
           </div>
         </div>
-
         <div class="status-section">
           <span class="status-badge" :class="getStatusClass(item.status)">
             {{ getStatusText(item.status) }}
@@ -33,7 +31,6 @@
           </button>
         </div>
       </div>
-
       <div class="empty-tip" v-if="exchangeList.length === 0">
         <img src="https://placeholder.com/300" alt="无兑换记录">
         <p>暂无兑换记录</p>
@@ -47,32 +44,14 @@ export default {
   name: 'PersonalExchange',
   data() {
     return {
-      exchangeList: [
-        {
-          id: 1,
-          name: '省赛无忧班课程',
-          description: '7天刷题会员，包含全套备考资料',
-          image: 'https://dn-simplecloud.shiyanlou.com/assets/1743486813590_49360d962fa99786c6f3896eda574fb6',
-          time: '2023-05-15 14:30',
-          status: 3
-        },
-        {
-          id: 2,
-          name: '定制雨伞',
-          description: '链接教育定制款，限量版',
-          image: 'https://dn-simplecloud.shiyanlou.com/assets/1739517930764_fc60d81fa5ff89672cbcb796b76fe446',
-          time: '2023-05-10 09:15',
-          status: 4
-        },
-        {
-          id: 3,
-          name: '舒适靠枕',
-          description: '缓解压力，考试必备',
-          image: 'https://dn-simplecloud.shiyanlou.com/assets/1719986089222_f9a52279bedf0a41cbf0fd2ee5059133',
-          time: '2023-05-05 16:45',
-          status: 2
-        }
-      ]
+      exchangeList: []
+    }
+  },
+  created() {
+    // 从本地存储获取兑换记录
+    const storedExchangeList = JSON.parse(localStorage.getItem('exchangeList'));
+    if (storedExchangeList) {
+      this.exchangeList = storedExchangeList;
     }
   },
   methods: {
@@ -85,7 +64,6 @@ export default {
       }
       return statusMap[status] || ''
     },
-
     getStatusText(status) {
       const textMap = {
         1: '待发货',
@@ -95,23 +73,23 @@ export default {
       }
       return textMap[status] || '未知状态'
     },
-
     confirmReceipt(id) {
       this.$confirm('确认收到商品了吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const index = this.exchangeList.findIndex(item => item.id === id)
-        if (index !== -1) {
-          this.exchangeList[index].status = 4
+        const index = this.exchangeList.findIndex(item => item.id === id);
+        if (index!== -1) {
+          this.exchangeList[index].status = 4;
+          // 更新本地存储
+          localStorage.setItem('exchangeList', JSON.stringify(this.exchangeList));
         }
-        this.$message.success('收货确认成功')
+        this.$message.success('收货确认成功');
       })
     },
-
     viewLogistics(id) {
-      this.$message.info(`查看ID为${id}的物流信息`)
+      this.$message.info(`查看ID为${id}的物流信息`);
     }
   }
 }
@@ -124,7 +102,6 @@ export default {
   margin: 0 auto;
   padding: 20px;
 }
-
 .page-title {
   font-size: 24px;
   color: #333;
@@ -132,13 +109,11 @@ export default {
   padding-bottom: 15px;
   border-bottom: 1px solid #eee;
 }
-
 .exchange-list {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-
 .exchange-card {
   padding: 20px;
   border-bottom: 1px solid #f5f5f5;
@@ -146,17 +121,14 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
-
 .exchange-card:last-child {
   border-bottom: none;
 }
-
 .product-info {
   display: flex;
   align-items: center;
   flex: 1;
 }
-
 .product-image {
   width: 80px;
   height: 80px;
@@ -164,36 +136,30 @@ export default {
   border-radius: 4px;
   margin-right: 20px;
 }
-
 .product-details {
   flex: 1;
 }
-
 .product-name {
   font-size: 16px;
   color: #333;
   margin: 0 0 8px 0;
 }
-
 .product-desc {
   font-size: 14px;
   color: #999;
   margin: 0 0 8px 0;
 }
-
 .exchange-time {
   font-size: 12px;
   color: #ccc;
   margin: 0;
 }
-
 .status-section {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   min-width: 120px;
 }
-
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
@@ -201,27 +167,22 @@ export default {
   font-size: 12px;
   margin-bottom: 10px;
 }
-
 .status-pending {
   background: #fff3e0;
   color: #ff9800;
 }
-
 .status-shipped {
   background: #e3f2fd;
   color: #2196f3;
 }
-
 .status-transit {
   background: #e8f5e9;
   color: #4caf50;
 }
-
 .status-completed {
   background: #f5f5f5;
   color: #9e9e9e;
 }
-
 .action-btn {
   padding: 6px 12px;
   background: #4a90e2;
@@ -232,27 +193,22 @@ export default {
   cursor: pointer;
   transition: opacity 0.3s;
 }
-
 .action-btn:hover {
   opacity: 0.9;
 }
-
 .action-btn.secondary {
   background: #f5f5f5;
   color: #666;
 }
-
 .empty-tip {
   text-align: center;
   padding: 50px 0;
 }
-
 .empty-tip img {
   width: 120px;
   opacity: 0.6;
   margin-bottom: 20px;
 }
-
 .empty-tip p {
   color: #999;
   font-size: 14px;

@@ -1,7 +1,20 @@
 <template>
   <div>
     <div class="hot-class">
-      <span>热门好课</span>
+      <!-- 图片轮播图和导航条区域 -->
+      <div class="carousel-and-tabs">
+        <el-carousel :interval="4000" type="card" height="400px">
+          <el-carousel-item v-for="(imageUrl, index) in carouselImages" :key="index">
+            <img :src="imageUrl" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+          </el-carousel-item>
+        </el-carousel>
+        <el-tabs style="activeTab" @tab-click="handleTabClick">
+          <el-tab-pane label="热门好课" name="hot-courses"></el-tab-pane>
+          <el-tab-pane label="推荐课程" name="recommended-courses"></el-tab-pane>
+          <el-tab-pane label="最新课程" name="new-courses"></el-tab-pane>
+        </el-tabs>
+      </div>
+
       <div class="header">
         <span class="s1" v-for="item in tipList" :key="item.id" @click="ontip(item)"
               :class="[{ active: activeName == item.name }]">{{ item.name }}</span>
@@ -48,6 +61,7 @@
 </template>
 
 <script>
+
 import {
   mapMutations,
   mapState
@@ -66,9 +80,21 @@ export default {
       id: 1001,
       // img: require('@/assets/class.png'),
       lessons: [],
-      skeletonShow: false
+      skeletonShow: false,
+      activeIndex: '1',
+      activeTab: 'hot-courses',
+      carouselImages: [
+        // 这里使用你提供的图片路径，你可以添加多个图片路径
+        require('@/assets/1.jpg'),
+        require('@/assets/2.jpg'),
+          require('@/assets/4.jpg'),
+
+
+        // 可以继续添加其他图片路径
+      ]
     };
   },
+
   created() {
     if (this.beforeTarget.name) {
       this.activeName = this.beforeTarget.name
@@ -121,6 +147,14 @@ export default {
           img: item.img
         }
       })
+    },
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      },
+      handleTabClick(tab) {
+        console.log('点击了标签', tab.name);
+      }
     }
   },
 };
@@ -139,6 +173,7 @@ export default {
   > span {
     font-size: 28px;
     margin-bottom: 16px;
+
     font-weight: 600;
     color: #1a1a1a;
   }
@@ -271,6 +306,16 @@ export default {
       }
     }
   }
+  .carousel-and-tabs {
+    width: 100%;
+    max-width: 20px;
+
+  }
+  .hot-courses-content {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+  }
 }
 @media (max-width: 768px) {
   .hot-class {
@@ -297,5 +342,25 @@ export default {
 
     .count { margin-top: 8px; }
   }
+}
+/* 添加轮播图和导航条的样式 */
+.carousel-and-tabs {
+  margin-top: 88px;
+  width: 100%;
+  min-width: 1250px;
+  background-color: #fff;
+}
+.carousel-and-tabs {
+  width: 100%;
+  margin-top: 20px;
+  text-align: center; /* 让轮播图和导航条在容器内水平居中 */
+}
+.el-carousel {
+  width: 100%; /* 让轮播图宽度占容器的80%，可调整比例 */
+  margin: 0 auto; /* 让轮播图在容器内水平居中 */
+}
+.el-tabs {
+  width: 100%; /* 让导航条宽度占容器的80%，和轮播图宽度保持一致更协调 */
+  margin: 10px auto 0; /* 上边距10px，水平居中，上边距可按需调整 */
 }
 </style>

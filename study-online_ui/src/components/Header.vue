@@ -15,7 +15,7 @@
                     <el-menu-item index="7-1">企业服务</el-menu-item>
                     <el-menu-item index="7-2">高职课程</el-menu-item>
                     <el-menu-item index="7-3"@click="goToAdmin" >管理平台</el-menu-item>
-                    <el-menu-item index="7-7" style="border: none;">工商管理专业学位研究生</el-menu-item>
+                    <el-menu-item index="7-4" style="border: none;">工商管理专业学位研究生</el-menu-item>
                 </el-submenu>
             </el-menu>
             <el-input @keyup.enter.native="search" style="width: 180px;height: 40px" placeholder="请输入内容"
@@ -35,6 +35,7 @@
                         <el-dropdown-item @click.native="$router.push('/personal/1')">个人中心</el-dropdown-item>
                         <el-dropdown-item @click.native="$router.push('/personal/2')">我的课程</el-dropdown-item>
                         <el-dropdown-item @click.native="$router.push('/personal/3')">积分排名</el-dropdown-item>
+                       <el-dropdown-item @click.native="$router.push('/personal/4')">积分兑换</el-dropdown-item>
                         <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>

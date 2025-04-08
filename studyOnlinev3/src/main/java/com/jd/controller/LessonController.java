@@ -97,11 +97,15 @@ public class LessonController {
      */
     @GetMapping("/getLessonTreeById")
     public OutputObject getLessonTree(@RequestParam("lessonId") Integer lessonId,Tree tree){
+        System.out.println("1111");
         LambdaQueryWrapper<Tree> lqw=new LambdaQueryWrapper<>();
         lqw.eq(Tree::getLessonId,lessonId);
 //        List<Tree> list = treeMapper.selectList(null);
         List<Tree> list = treeService.list(lqw);
         List<Tree> rootNode = NodeUtil.getChilNode(list,tree);
+        System.out.println("22222");
+
+        System.out.println(new OutputObject(String.valueOf(HttpStatus.OK.value()),"查询成功",rootNode));
         return new OutputObject(String.valueOf(HttpStatus.OK.value()),"查询成功",rootNode);
     }
 
