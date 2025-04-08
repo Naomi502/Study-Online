@@ -14,7 +14,7 @@
                     <template slot="title">更多</template>
                     <el-menu-item index="7-1">企业服务</el-menu-item>
                     <el-menu-item index="7-2">高职课程</el-menu-item>
-                    <el-menu-item index="7-3">管理平台</el-menu-item>
+                    <el-menu-item index="7-3"@click="goToAdmin" >管理平台</el-menu-item>
                     <el-menu-item index="7-7" style="border: none;">工商管理专业学位研究生</el-menu-item>
                 </el-submenu>
             </el-menu>
@@ -75,6 +75,7 @@ export default {
             imgFile: ''
         };
     },
+
     props: ['ai', 'dia', 'index', 'index2', 'index3', 'update'],
 
     components: {
@@ -106,6 +107,9 @@ export default {
         ...mapGetters(['userId'])
     },
     methods: {
+        goToAdmin() {
+          window.location.href='http://study-online-admin.yzkor.com'
+        },
         ...mapMutations(['SETUSERID', 'SETSEARCH']),
         customFunc() {
             // 子组件中需要执行的代码
