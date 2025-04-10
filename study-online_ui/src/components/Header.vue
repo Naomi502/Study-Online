@@ -22,7 +22,7 @@
                 prefix-icon="el-icon-search" v-model="input">
             </el-input>
             <!-- <i class="el-icon-mobile-phone" style="font-size: 33px;margin-top: 30px;"></i> -->
-            <div style="margin-left: -30px;" v-show="!userName">
+            <div style="" v-show="!userName">
                 <span style="cursor: pointer;" @click="dialogVisible = true">登录</span>
                 <el-button style="width: 100px;margin-left: 25px;" @click="dialogVisible2 = true" type="primary"
                     round>注册</el-button>
@@ -217,7 +217,7 @@ export default {
 .header {
     width: 100%;
     margin: 0 auto;
-    min-width: 1250px;
+    min-width: 800px;
     // margin-left: 39px;
     // width: 100%;
     height: 88px;
@@ -234,7 +234,7 @@ export default {
     animation: slideDown 1.2s ease forwards; /* 添加动画效果 */
 
     .block {
-        margin-top: 19px;
+        margin-top: 16px;
         position: relative;
         right: 30px;
     }
