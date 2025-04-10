@@ -1,57 +1,111 @@
 <template>
   <div>
     <div class="hot-class">
-      <!-- 图片轮播图和导航条区域 -->
+      <!-- 轮播图和导航标签容器 -->
       <div class="carousel-and-tabs">
-        <el-carousel :interval="4000" type="card" height="400px">
+        <el-carousel
+            :interval="4000"
+            type="card"
+            :height="carouselHeight"
+            class="responsive-carousel"
+        >
           <el-carousel-item v-for="(imageUrl, index) in carouselImages" :key="index">
-            <img :src="imageUrl" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+            <img
+                :src="imageUrl"
+                alt="课程推荐"
+                class="carousel-image"
+            >
           </el-carousel-item>
         </el-carousel>
-        <el-tabs style="activeTab" @tab-click="handleTabClick">
+
+        <el-tabs
+            v-model="activeTab"
+            class="responsive-tabs"
+            @tab-click="handleTabClick"
+        >
           <el-tab-pane label="热门好课" name="hot-courses"></el-tab-pane>
           <el-tab-pane label="推荐课程" name="recommended-courses"></el-tab-pane>
           <el-tab-pane label="最新课程" name="new-courses"></el-tab-pane>
         </el-tabs>
       </div>
 
+      <!-- 课程分类导航 -->
       <div class="header">
-        <span class="s1" v-for="item in tipList" :key="item.id" @click="ontip(item)"
-              :class="[{ active: activeName == item.name }]">{{ item.name }}</span>
+        <span
+            class="category-tab"
+            v-for="item in tipList"
+            :key="item.id"
+            @click="ontip(item)"
+            :class="{ active: activeName === item.name }"
+        >
+          {{ item.name }}
+        </span>
       </div>
-      <div style="display: flex; flex-wrap: wrap; margin: auto; justify-content: center">
-        <el-skeleton animated v-show="skeletonShow" style="width:250px; padding: 25px;" v-for="(item, index) in 8" :key="index">
+
+      <!-- 骨架屏加载状态 -->
+      <div class="skeleton-container" v-show="skeletonShow">
+        <el-skeleton
+            animated
+            v-for="(item, index) in 8"
+            :key="index"
+            class="course-skeleton"
+        >
           <template slot="template">
-            <el-skeleton-item variant="image" style="width: 100%; height: 180px;" />
-            <div style="padding: 14px;">
-              <el-skeleton-item variant="p" style="width: 30%" />
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <el-skeleton-item variant="text" style="width: 60%;" />
-                <el-skeleton-item variant="text" style="width: 20%;" />
+            <el-skeleton-item variant="image" class="skeleton-image" />
+            <div class="skeleton-content">
+              <el-skeleton-item variant="p" class="skeleton-title" />
+              <div class="skeleton-meta">
+                <el-skeleton-item variant="text" class="skeleton-text" />
+                <el-skeleton-item variant="text" class="skeleton-count" />
               </div>
             </div>
           </template>
         </el-skeleton>
       </div>
-      <div class="content" v-show="!skeletonShow">
-        <el-empty v-if="lessons.length == 0" style="margin: 20px auto;" description="该分类下暂无相关课程！"></el-empty>
-        <el-card v-else class="box" shadow="hover":body-style="{ padding: '10px' }" v-for="(item, index) in lessons" :key="index"
-                 @click.native="toDetail(item)">
-          <div class="top">
-            <el-image style="width: 100%; height: 100%" :src="item.img" fit="cover">
+
+      <!-- 课程卡片列表 -->
+      <div class="course-container" v-show="!skeletonShow">
+        <el-empty
+            v-if="lessons.length === 0"
+            class="empty-prompt"
+            description="该分类下暂无相关课程！"
+        ></el-empty>
+
+        <el-card
+            v-else
+            v-for="(item, index) in lessons"
+            :key="index"
+            class="course-card"
+            shadow="hover"
+            :body-style="{ padding: '10px' }"
+            @click.native="toDetail(item)"
+        >
+          <div class="card-top">
+            <el-image
+                class="course-image"
+                :src="item.img"
+                fit="cover"
+            >
               <div slot="error" class="image-error">
                 <i class="el-icon-picture-outline"></i>
               </div>
             </el-image>
           </div>
-          <div class="bottom">
-            <div class="introduce">
-              <span class="title">{{ item.lname }}</span>
-              <span class="desc">{{ item.remark }}</span>
+
+          <div class="card-bottom">
+            <div class="course-info">
+              <h3 class="course-title">{{ item.lname }}</h3>
+              <p class="course-desc">{{ item.remark }}</p>
             </div>
-            <div class="school">
-              <span class="info">{{ item.school }}<span class="teacher">授课人:{{ item.tname }}</span></span>
-              <span class="count"><i class="el-icon-user"></i>{{ item.dianJi }}</span>
+
+            <div class="course-meta">
+              <span class="meta-school">
+                {{ item.school }}
+                <span class="meta-teacher">授课人:{{ item.tname }}</span>
+              </span>
+              <span class="meta-count">
+                <i class="el-icon-user"></i>{{ item.dianJi }}
+              </span>
             </div>
           </div>
         </el-card>
@@ -61,82 +115,97 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
+import { getHotCategory, getLessons } from '@/api/lesson.js'
 
-import {
-  mapMutations,
-  mapState
-} from 'vuex';
-import {
-  getHotCategory,
-  getLessons
-} from '@/api/lesson.js'
 export default {
-  name: "StudyOnlineHotClass",
+  name: 'StudyOnlineHotClass',
   inject: ['reload'],
   data() {
     return {
       tipList: [],
       activeName: "热门好课",
       id: 1001,
-      // img: require('@/assets/class.png'),
       lessons: [],
       skeletonShow: false,
-      activeIndex: '1',
       activeTab: 'hot-courses',
+      carouselHeight: '400px',
       carouselImages: [
-        // 这里使用你提供的图片路径，你可以添加多个图片路径
         require('@/assets/1.jpg'),
         require('@/assets/2.jpg'),
-          require('@/assets/4.jpg'),
-
-
-        // 可以继续添加其他图片路径
+        require('@/assets/4.jpg')
       ]
-    };
-  },
-
-  created() {
-    if (this.beforeTarget.name) {
-      this.activeName = this.beforeTarget.name
-      this.id = this.beforeTarget.id
     }
-  },
-  mounted() {
-    this.skeletonShow = true
-    getHotCategory().then(({
-                             data: res
-                           }) => {
-      this.tipList = res
-    }),
-        this.getLesson()
   },
   computed: {
     ...mapState(['beforeTarget'])
   },
 
+  created() {
+    if (this.beforeTarget?.name) {
+      this.activeName = this.beforeTarget.name
+      this.id = this.beforeTarget.id
+    }
+  },
+  async mounted() {
+    this.skeletonShow = true
+    this.handleResize()
+    await this.fetchCategories() // 必须确保先获取分类数据
+    this.handleResize()
+    window.addEventListener('resize', this.handleResize)
+
+    // 关键代码：自动调用ontip
+    if(this.tipList.length > 0) {
+      const defaultItem = this.tipList.find(item => item.name === "热门好课") || this.tipList[0]
+      this.ontip(defaultItem)
+    }
+    window.addEventListener('resize', this.handleResize)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
+  },
   methods: {
     ...mapMutations(['SETTARGET']),
 
-    getLesson() {
-      getLessons(this.id).then(({
-                                  data: res
-                                }) => {
-        this.lessons = res
-        setTimeout(() => {
-          this.skeletonShow = false
-        }, 150);
-        // console.log(this.lessons);
-      })
+    handleResize() {
+      this.carouselHeight = window.innerWidth < 768
+          ? '300px'
+          : window.innerWidth < 1024
+              ? '350px'
+              : '400px'
     },
 
-    ontip(i) {
-      if (this.id != i.id) {
+    async fetchCategories() {
+      try {
+        const { data } = await getHotCategory()
+        this.tipList = data
+      } catch (error) {
+        console.error('获取分类失败:', error)
+      }
+    },
+
+    async getLesson() {
+      try {
+        const { data } = await getLessons(this.id)
+        this.lessons = data
+        setTimeout(() => {
+          this.skeletonShow = false
+        }, 150)
+      } catch (error) {
+        console.error('获取课程失败:', error)
+        this.skeletonShow = false
+      }
+    },
+
+    ontip(item) {
+      if (this.id !== item.id) {
         this.skeletonShow = true
       }
-      this.id = i.id
-      this.activeName = i.name;
+      this.id = item.id
+      this.activeName = item.name
       this.getLesson()
-      this.SETTARGET(i)
+      this.SETTARGET(item)
     },
 
     toDetail(item) {
@@ -148,219 +217,326 @@ export default {
         }
       })
     },
-    methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleTabClick(tab) {
-        console.log('点击了标签', tab.name);
-      }
+
+    handleTabClick(tab) {
+      console.log('切换标签:', tab.name)
+      // 这里可以添加加载不同课程列表的逻辑
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="less" scoped>
 .hot-class {
-  padding: 60px 5%;
-  max-width: 80%;
+  padding: 60px 20px;
+  max-width: 1400px;
   margin: 0 auto;
   animation: load 0.4s linear;
+
   @keyframes load {
     0% { opacity: 0; transform: translateY(70px); }
     100% { opacity: 1; transform: translateY(0); }
   }
-  > span {
-    font-size: 28px;
-    margin-bottom: 16px;
+}
 
-    font-weight: 600;
-    color: #1a1a1a;
+.carousel-and-tabs {
+  margin: 20px 0 40px;
+
+  // 轮播图响应式处理
+  .responsive-carousel {
+    ::v-deep .el-carousel__container {
+      max-height: 80vh;
+    }
+
+    .carousel-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
   }
-  .header {
-    overflow-x: auto;
-    scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
-    margin: 20px 0 40px;
-    height: auto;
 
-    .s1 {
-      min-width: 88px;
-      height: 36px;
-      line-height: 36px;
-      font-size: 14px;
-      display: inline-block;
-      text-align: center;
-      border-radius: 18px;
-      background: rgba(65, 130, 250, 0.1);
-      margin: 0 8px 8px;
-      padding: 0 12px;
-      transition: all 0.3s;
+  // 导航标签样式
+  .responsive-tabs {
+    margin-top: 30px;
 
-      &:hover {
-        color: #1769fe;
-        background: rgba(65, 130, 250, 0.2);
+    ::v-deep {
+      .el-tabs__nav-wrap {
+        justify-content: center;
       }
 
-      &.active {
-        color: #fff !important;
-        background: #1769fe !important;
+      .el-tabs__nav {
+        flex-wrap: wrap;
+        row-gap: 10px;
+      }
+
+      .el-tabs__item {
+        font-size: 16px;
+        padding: 0 25px;
       }
     }
   }
-  .content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    width: 100%;
-    .box {
-      width: 100%;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.3s;
-      cursor: pointer;
+}
 
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      }
-      .top {
-        position: relative;
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 40px;
+
+  .category-tab {
+    flex: 0 0 auto;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    background: rgba(23, 105, 254, 0.1);
+    color: #1769fe;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: rgba(23, 105, 254, 0.2);
+    }
+
+    &.active {
+      background: #1769fe;
+      color: white;
+    }
+  }
+}
+
+.skeleton-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 15px;
+
+  .course-skeleton {
+    border-radius: 8px;
+    overflow: hidden;
+
+    ::v-deep {
+      .skeleton-image {
         width: 100%;
-        padding-top: 56.25%;
-        background: #f5f7fa;
-
-        .el-image {
-          position: absolute;
-          border-radius: 8px;
-          top: 0;
-          left: 0;
-          height: 100%;
-        }
-
-        .image-error {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f0f2f5;
-          color: #c0c4cc;
-          font-size: 24px;
-        }
+        height: 180px;
+        border-radius: 8px 8px 0 0;
       }
-      .bottom {
-        padding: 16px;
 
-        .introduce {
-          .title {
-            font-size: 16px;
-            font-weight: 500;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-          }
+      .skeleton-content {
+        padding: 14px;
 
-          .desc {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-          }
+        .skeleton-title {
+          width: 70%;
+          height: 20px;
+          margin-bottom: 8px;
         }
-        .school {
-          margin-top: 16px;
+
+        .skeleton-meta {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          font-size: 12px;
-          color: #999;
 
-          .info {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-
-            .teacher {
-              margin-left: 8px;
-              color: #666;
-            }
+          .skeleton-text {
+            width: 60%;
+            height: 16px;
           }
 
-          .count {
-            flex-shrink: 0;
-            margin-left: 12px;
-
-            i { margin-right: 4px; }
+          .skeleton-count {
+            width: 30%;
+            height: 16px;
           }
         }
       }
     }
   }
-  .carousel-and-tabs {
-    width: 100%;
-    max-width: 20px;
+}
 
+.course-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 15px;
+
+  .empty-prompt {
+    grid-column: 1 / -1;
+    margin: 40px 0;
   }
-  .hot-courses-content {
-    width: 100%;
-    margin-top: 20px;
-    padding: 10px;
+
+  .course-card {
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .card-top {
+      position: relative;
+      padding-top: 56.25%;
+      background: #f8f9fa;
+
+      .course-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+      }
+
+      .image-error {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #c0c4cc;
+        font-size: 48px;
+        background: #f0f2f5;
+      }
+    }
+
+    .card-bottom {
+      padding: 16px 10px;
+
+      .course-info {
+        margin-bottom: 12px;
+
+        .course-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin-bottom: 8px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+        }
+
+        .course-desc {
+          font-size: 14px;
+          color: #666;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin-bottom: 12px;
+        }
+      }
+
+      .course-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+
+        .meta-school {
+          color: #909399;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          .meta-teacher {
+            margin-left: 8px;
+            color: #666;
+          }
+        }
+
+        .meta-count {
+          flex-shrink: 0;
+          color: #1769fe;
+          margin-left: 12px;
+
+          i {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
   }
 }
+
+@media (max-width: 1200px) {
+  .hot-class {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 992px) {
+  .responsive-carousel {
+    ::v-deep .el-carousel__item {
+      width: 80% !important;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .hot-class {
-    padding: 40px 3%;
+    padding: 40px 15px;
 
-    > span { font-size: 24px; }
+    .header {
+      margin: 15px 0 30px;
 
-    .header .s1 {
-      min-width: 72px;
-      font-size: 13px;
-      margin: 0 4px 8px;
+      .category-tab {
+        padding: 6px 16px;
+        font-size: 13px;
+      }
     }
 
-    .content {
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1rem;
+    .carousel-and-tabs {
+      .responsive-tabs {
+        ::v-deep .el-tabs__item {
+          font-size: 14px;
+          padding: 0 15px;
+        }
+      }
     }
   }
+
+  .skeleton-container,
+  .course-container {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
 }
+
 @media (max-width: 480px) {
-  .school {
-    flex-direction: column;
-    align-items: flex-start;
+  .hot-class {
+    padding: 30px 10px;
 
-    .count { margin-top: 8px; }
+    .carousel-and-tabs {
+      .responsive-carousel {
+        ::v-deep {
+          .el-carousel__item {
+            width: 90% !important;
+          }
+          .el-carousel__arrow {
+            display: none;
+          }
+        }
+      }
+
+      .responsive-tabs {
+        ::v-deep .el-tabs__item {
+          font-size: 13px;
+          padding: 0 12px;
+        }
+      }
+    }
+
+    .course-meta {
+      flex-direction: column;
+      align-items: flex-start !important;
+
+      .meta-count {
+        margin-left: 0 !important;
+        margin-top: 6px;
+      }
+    }
   }
-}
-/* 添加轮播图和导航条的样式 */
-.carousel-and-tabs {
-  margin-top: 88px;
-  width: 100%;
-  min-width: 1250px;
-  background-color: #fff;
-}
-.carousel-and-tabs {
-  width: 100%;
-  margin-top: 20px;
-  text-align: center; /* 让轮播图和导航条在容器内水平居中 */
-}
-.el-carousel {
-  width: 100%; /* 让轮播图宽度占容器的80%，可调整比例 */
-  margin: 0 auto; /* 让轮播图在容器内水平居中 */
-}
-.el-tabs {
-  width: 100%; /* 让导航条宽度占容器的80%，和轮播图宽度保持一致更协调 */
-  margin: 10px auto 0; /* 上边距10px，水平居中，上边距可按需调整 */
 }
 </style>

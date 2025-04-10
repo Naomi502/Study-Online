@@ -100,13 +100,13 @@ export default {
 
     methods: {
         ...mapMutations(['SETISCUT']),
-        getLesson() {
-            getLessonDetail(this.id).then(({ data: res }) => {
-                console.log(res);
-                this.lesson.introduce = res.introduce
-                this.lesson.vedio = res.vedio
-            })
-        },
+      getLesson() {
+        getLessonDetail(this.id).then(({ data: res }) => {
+          console.log(res);
+          this.lesson.introduce = res.introduce
+          this.lesson.vedio = res.vedio
+        })
+      },
         goStudy() {
             if (localStorage.getItem('userName')) {
                 joinLesson({

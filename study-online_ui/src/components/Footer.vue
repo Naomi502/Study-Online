@@ -32,7 +32,7 @@
               <p class="slogan-sub">New Education, New World</p>
             </div>
             <div class="footer-qrcode">
-              <img src="qrcode.png" alt="微信公众号">
+              <img style="width: 80px; height: 80px " src="/qrcode.jpg" alt="微信公众号">
               <p>关注官方公众号</p>
             </div>
           </div>
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="security">
-            <img class="badge" src="security-badge.png" alt="安全认证">
+            <img class="badge" src="/aqrz.png" alt="安全认证">
           </div>
         </div>
       </div>

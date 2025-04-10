@@ -162,7 +162,7 @@ export default {
                 fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
                 sources: [{
                     type: "video/mp4",
-                    src: localStorage.getItem("video") ? localStorage.getItem("video") : "https:study-onlne.oss-cn-nanjing.aliyuncs.com/0262076c81d9f303-10.mp4" //你的视频地址（必填）
+                    src: "/video/1.mp4" //你的视频地址
                 }],
                 poster: "", //你的封面地址
                 // width: document.documentElement.clientWidth,

@@ -227,27 +227,27 @@ export default {
       courses: [
         {
           id: 'gfz',
-          name: '高分子合成材料学',
-          description: '加深理解高分子合成材料领域的新理论、新技术和新方法',
-          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y1.jpg'
+          name: '智慧医疗创新体验',
+          description: '走进智慧医疗，解锁人工智能医疗技术的奥秘！',
+          img: '/picture/h2.jpg'
         },
         {
           id: 'xdyh',
           name: '现代优化方法',
           description: '加深理解高分子合成材料领域的新理论、新技术和新方法',
-          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y2.jpg'
+          img: '/picture/y2.jpg'
         },
         {
           id: 'pwf',
           name: '偏微分方程',
           description: '数学学科的重要学科基础课程',
-          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y3.jpg'
+          img: '/picture/y3.jpg'
         },
         {
           id: 'mks',
           name: '马克思主义哲学专题研究',
           description: '“三大时期”“五大批判”经纬交织，纵横捭阖',
-          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y4.jpg'
+          img: '/picture/y4.jpg'
         }
       ],
       activeIndex: '3',

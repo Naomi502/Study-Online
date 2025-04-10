@@ -1,7 +1,7 @@
 <template>
     <div id="app">
-        <vue-particles color="#409EFF" :particleOpacity="0.3" :particlesNumber="18" shapeType="circle" :particleSize="6"
-            linesColor="#409EFF" :linesWidth="1" :lineLinked="true" :lineOpacity="0.4" :linesDistance="150" :moveSpeed="3"
+        <vue-particles color="#409EFF" :particleOpacity="0.5" :particlesNumber="18" shapeType="circle" :particleSize="6"
+            linesColor="#409EFF" :linesWidth="1" :lineLinked="true" :lineOpacity="0.7" :linesDistance="150" :moveSpeed="2"
             :hoverEffect="true" hoverMode="grab" :clickEffect="true" clickMode="push">
         </vue-particles>
         <transition name="fade" mode="out-in">

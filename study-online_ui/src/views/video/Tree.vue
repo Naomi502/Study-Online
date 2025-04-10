@@ -43,16 +43,12 @@ export default {
     created() {
     },
     mounted() {
-      console.log("5555555")
         this.getTrees()
     },
 
     methods: {
         getTrees() {
-          console.log("666666")
             getLessonTreeById(this.lessonId).then(({ data: res }) => {
-              console.log("7777")
-              console.log(res)
                 this.lessonTree = res
             })
         },
