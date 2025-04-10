@@ -1,5 +1,5 @@
 // 选择题
-const safeQuestions = [
+const mksQuestions = [
     {
         text: '在实验室中，下列哪种行为是正确的安全操作？',
         options: [
@@ -124,4 +124,4 @@ const fillInTheBlanks = [
 ];
 
 // 导出数据
-export { safeQuestions, fillInTheBlanks };
+export { mksQuestions, fillInTheBlanks };

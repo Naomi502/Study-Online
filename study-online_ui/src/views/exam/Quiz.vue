@@ -62,8 +62,8 @@
                 :class="{ 'selected': selectedCourse === course.id }"
                 @click="selectCourse(course.id)"
             >
-              <div class="course-icon">
-                <i :class="course.icon"></i>
+              <div class="course-img">
+                <img :src="course.img" :alt="'课程图片'" style="width: 100%; height: 100%; border-radius: 5px;">
               </div>
               <div class="course-info">
                 <h3>{{ course.name }}</h3>
@@ -194,12 +194,11 @@ import Footer from '@/components/Footer.vue';
 
 // 导入不同课程的题目
 
-import reactQuestions from '@/data/reactQuestions';
-import javascriptQuestions from '@/data/javascriptQuestions';
-import cssQuestions from '@/data/cssQuestions';
 
-import {safeQuestions,fillInTheBlanks} from "@/data/safetyQuestions";
-
+import {mksQuestions,fillInTheBlanks} from "@/data/mksQuestions";
+import gfzQuestions from "@/data/gfzQuestions";
+import pwfQuestions from "@/data/pwfQuestions";
+import xdyhQuestions from "@/data/xdyhQuestions";
 
 export default {
   name: 'QuizPage',
@@ -227,28 +226,28 @@ export default {
       ],
       courses: [
         {
-          id: 'safety',
-          name: 'Safety',
-          description: '清华大学实验室安全课程--M&E安全,快速了解安全知识, 提高安全意识',
-          icon: 'icon-safety'
+          id: 'gfz',
+          name: '高分子合成材料学',
+          description: '加深理解高分子合成材料领域的新理论、新技术和新方法',
+          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y1.jpg'
         },
         {
-          id: 'react',
-          name: 'React',
-          description: '用于构建用户界面的JavaScript库',
-          icon: 'icon-react'
+          id: 'xdyh',
+          name: '现代优化方法',
+          description: '加深理解高分子合成材料领域的新理论、新技术和新方法',
+          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y2.jpg'
         },
         {
-          id: 'javascript',
-          name: 'JavaScript',
-          description: 'Web开发的核心编程语言',
-          icon: 'icon-js'
+          id: 'pwf',
+          name: '偏微分方程',
+          description: '数学学科的重要学科基础课程',
+          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y3.jpg'
         },
         {
-          id: 'css',
-          name: 'CSS',
-          description: '样式表语言，用于描述HTML文档的呈现',
-          icon: 'icon-css'
+          id: 'mks',
+          name: '马克思主义哲学专题研究',
+          description: '“三大时期”“五大批判”经纬交织，纵横捭阖',
+          img: 'https://study-onlne.oss-cn-nanjing.aliyuncs.com/y4.jpg'
         }
       ],
       activeIndex: '3',
@@ -272,10 +271,10 @@ export default {
   created() {
     // 初始化各课程题目
     this.allQuestions = {
-      safety: safeQuestions,
-      react: reactQuestions,
-      javascript: javascriptQuestions,
-      css: cssQuestions
+      gfz: gfzQuestions,
+      mks: mksQuestions,
+      pwf: pwfQuestions,
+      xdyh: xdyhQuestions
     };
   },
   mounted() {
@@ -501,9 +500,10 @@ export default {
 /* 课程选择界面样式 */
 .course-select-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 130px auto 200px;
   padding: 0 20px;
+  z-index: 1;
 }
 
 .course-select-card {
@@ -511,6 +511,7 @@ export default {
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   padding: 40px;
+  margin-top: 70px;
 }
 
 .course-select-card h2 {
@@ -528,8 +529,7 @@ export default {
 }
 
 .course-item {
-  display: flex;
-  padding: 20px;
+  padding: 15px;
   border: 1px solid #eee;
   border-radius: 12px;
   cursor: pointer;
@@ -537,6 +537,7 @@ export default {
 }
 
 .course-item:hover {
+
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -546,12 +547,13 @@ export default {
   background-color: #f0f9f5;
 }
 
-.course-icon {
-  width: 50px;
-  height: 50px;
+.course-img {
+  width: 100%;
+  height: 168px;
   background-color: #f5f5f5;
-  border-radius: 50%;
+  border-radius: 8px;
   display: flex;
+  margin-bottom: 7px;
   align-items: center;
   justify-content: center;
   margin-right: 15px;
@@ -559,20 +561,28 @@ export default {
   color: #42b983;
 }
 
-.course-item.selected .course-icon {
+.course-item.selected .course-img {
   background-color: #e1f5eb;
 }
 
 .course-info h3 {
-  font-size: 1.2rem;
+  margin-top: 15px;
+  margin-left: 7px;
+  margin-right: 7px;
+  font-size: 1rem;
+  font-weight: normal;
   color: #333;
-  margin-bottom: 5px;
+
 }
 
 .course-info p {
-  font-size: 0.9rem;
+  margin-left: 7px;
+  margin-right: 7px;
+  font-size: 0.8rem;
   color: #666;
   line-height: 1.5;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 .course-select-actions {
