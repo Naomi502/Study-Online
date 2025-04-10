@@ -52,8 +52,17 @@
       </div>
 
       <!-- 课程选择界面 -->
-      <div v-else-if="currentStep === 'courseSelect'" key="courseSelect" class="course-select-container">
-        <div class="course-select-card">
+    <!-- 修改课程选择容器部分 -->
+    <div v-else-if="currentStep === 'courseSelect'" key="courseSelect" class="course-select-container">
+      <transition name="fade">
+        <div v-if="isLoading" class="loading-mask">
+          <div class="loader">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">正在加载题目中，请稍候...</div>
+          </div>
+        </div>
+      </transition>
+      <div class="course-select-card">
           <h2>请选择测试课程</h2>
           <div class="course-list">
             <div
@@ -86,8 +95,9 @@
 
       </div>
 
+
       <!-- 答题主界面 -->
-      <div v-else key="quiz" class="quiz-container">
+    <div v-else-if="currentStep === 'quiz'" key="quiz" class="quiz-container">
         <div class="quiz-progress">
           <span>第 {{ currentQuestionIndex + 1 }} 题 / 共 {{ currentQuestions.length }} 题</span>
           <div class="progress-bar">
@@ -187,23 +197,95 @@
             <p>{{ currentQuestion.explanation }}</p>
           </div>
         </div>
+      </div>
+    <!-- 新增答题回顾页面 -->
+    <div v-else-if="currentStep === 'review'" class="review-container">
+      <div class="review-header">
+        <h2>📝 答题回顾</h2>
+        <div class="score-summary">
+          <div class="score-item">
+            <span class="score-label">总得分</span>
+            <span class="score-value">{{ score }}/{{ currentQuestions.length }}</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">正确率</span>
+            <span class="score-value">{{ Math.round((score / currentQuestions.length) * 100) }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="review-actions">
+        <button @click="backToCourseSelect" class="btn-back">
+          ← 返回课程选择
+        </button>
+        <button @click="restartQuiz" class="btn-restart">
+          🔄 重新挑战
+        </button>
+      </div>
+      <div class="questions-list">
+        <div
+            v-for="(question, index) in currentQuestions"
+            :key="index"
+            class="question-item"
+            :class="{'correct-answer': isCorrect(index), 'wrong-answer': !isCorrect(index)}"
+        >
+          <div class="question-header">
+            <h3>第 {{ index + 1 }} 题</h3>
+            <span class="answer-status">
+              {{ isCorrect(index) ? '✅ 正确' : '❌ 错误' }}
+            </span>
+          </div>
 
-        <div v-if="showFinalScore" class="result-modal">
-          <div class="result-content">
-            <h2>答题完成！</h2>
-            <p>你的得分: {{ score }} / {{ currentQuestions.length }}</p>
-            <p>正确率: {{ Math.round(score / currentQuestions.length * 100) }}%</p>
-            <div class="result-actions">
-              <button @click="restartQuiz" class="btn-restart">重新答题</button>
-              <button @click="backToCourseSelect" class="btn-back">选择其他课程</button>
+          <div class="original-question">
+            <p class="question-text">{{ question.text }}</p>
+            <div v-if="question.image" class="question-image">
+              <img :src="question.image" alt="题目图片">
+            </div>
+          </div>
+
+          <div class="answer-analysis">
+            <div class="user-answer">
+              <span>你的答案：</span>
+              <span class="user-option">
+                {{ String.fromCharCode(65 + userAnswers[index]) }}
+                <span v-if="!isCorrect(index)" class="wrong-mark">（错误）</span>
+              </span>
+            </div>
+            <div class="correct-answer">
+              <span>正确答案：</span>
+              <span class="correct-option">
+                {{ String.fromCharCode(65 + question.correctAnswer) }}
+              </span>
+            </div>
+            <div v-if="question.explanation" class="explanation">
+              <h4>答案解析：</h4>
+              <p>{{ question.explanation }}</p>
+            </div>
+          </div>
+
+          <div class="options-review">
+            <div
+                v-for="(option, optIndex) in question.options"
+                :key="optIndex"
+                class="option-item"
+                :class="{
+                'correct': optIndex === question.correctAnswer,
+                'selected': optIndex === userAnswers[index],
+                'wrong-selected': !isCorrect(index) && optIndex === userAnswers[index]
+              }"
+            >
+              <span class="option-letter">{{ String.fromCharCode(65 + optIndex) }}.</span>
+              <span class="option-text">{{ option }}</span>
             </div>
           </div>
         </div>
       </div>
 
 
+    </div>
+
     <Footer v-show="footerShow" />
   </div>
+
 </template>
 
 <script>
@@ -224,13 +306,15 @@ export default {
   data() {
     return {
       transitionName: 'slide-fade', // 过渡效果名称
-      currentStep: 'home', // 'home', 'courseSelect', 'quiz'
+      currentStep: 'home', // 新增 'loading' 状态
+      loadingTimeout: null, // 新增 'loading' 状态超时计时器
+      isLoading: false,  // 新增加载状态
       selectedCourse: null,
       fillInQuestions: fillInTheBlanks,
       userStats: {
-        points: 1280,
+        points: 169,
         accuracy: 85,
-        streakDays: 7
+        streakDays: 4
       },
       pointsRanking: [], // 替换原来的leaderboard
       courses: [
@@ -270,6 +354,7 @@ export default {
       score: 0,
       showFinalScore: false,
       userAnswers: []
+
     }
   },
   computed: {
@@ -304,11 +389,20 @@ export default {
     selectCourse(courseId) {
       this.selectedCourse = courseId;
     },
+    beforeDestroy() {
+      if (this.loadingTimeout) {
+        clearTimeout(this.loadingTimeout);
+      }
+    },
     startQuiz() {
       if (!this.selectedCourse) return;
-      this.currentQuestions = this.allQuestions[this.selectedCourse];
-      this.currentStep = 'quiz';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.isLoading = true;
+      setTimeout(() => {
+        this.currentQuestions = this.allQuestions[this.selectedCourse];
+        this.currentStep = 'quiz';
+        this.isLoading = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 2000);
     },
     selectOption(index) {
       if (!this.showResult) {
@@ -341,17 +435,32 @@ export default {
       this.selectedOption = null;
       this.showResult = false;
     },
+    // 修改结果展示方法
     showFinalResult() {
-      this.showFinalScore = true;
+      this.currentStep = 'review';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    // 添加辅助方法
+    isCorrect(questionIndex) {
+      return this.userAnswers[questionIndex] === this.currentQuestions[questionIndex].correctAnswer;
     },
     restartQuiz() {
-      this.transitionName = 'slide-fade-forward';
+      // 重置所有答题状态
       this.currentQuestionIndex = 0;
       this.selectedOption = null;
       this.showResult = false;
       this.score = 0;
       this.showFinalScore = false;
       this.userAnswers = [];
+
+      // 关键步骤：重新加载题目（确保使用最新题目）
+      this.currentQuestions = [...this.allQuestions[this.selectedCourse]];
+
+      // 跳转到答题界面
+      this.currentStep = 'quiz';
+
+      // 滚动到顶部提升体验
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     backToCourseSelect() {
@@ -362,14 +471,18 @@ export default {
       this.score = 0;
       this.showFinalScore = false;
       this.userAnswers = [];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     endQuiz() {
       if (confirm('确定要提前结束答题吗？已答题目将会保留进度。')) {
         this.showFinalScore = true;
-        // 自动计算当前得分（可选）
+        // 计算当前得分
         this.score = this.userAnswers.reduce((acc, ans, index) => {
           return acc + (ans === this.currentQuestions[index].correctAnswer ? 1 : 0)
         }, 0);
+        // 新增：直接跳转到回顾页面
+        this.currentStep = 'review';  // 添加这行关键代码
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   }
@@ -389,10 +502,12 @@ export default {
 .daily-quiz-section {
   width: 100%;
   max-width: 1200px;
+  height: 800px;
   margin: 130px auto 0;
   margin-bottom: 200px;
   padding: 40px 20px;
 }
+
 
 .quiz-header {
   text-align: center;
@@ -534,9 +649,10 @@ export default {
 .course-select-container {
   width: 100%;
   max-width: 1400px;
-  margin: 130px auto 200px;
-  padding: 0 20px;
-  z-index: 1;
+  height: 800px;
+  margin: 130px auto 0;
+  margin-bottom: 200px;
+  padding: 40px 20px;
 }
 
 .course-select-card {
@@ -660,9 +776,11 @@ export default {
 
 /* 答题界面样式 */
 .quiz-container {
-  width: 900px;
-  margin: 140px auto 40px;
-  padding: 30px;
+  width: 100%;
+  max-width: 1200px;
+  height: 100px;
+  margin: 130px auto 200px;
+  padding: 40px 20px;
   font-family: 'Arial', sans-serif;
   flex: 1;
   background: white;
@@ -685,7 +803,7 @@ export default {
   height: 100%;
   background-color: #1976d2;
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 2s ease;
 }
 
 .quiz-question {
@@ -712,7 +830,7 @@ export default {
 
 .option {
   padding: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border: 1px solid #eee;
   border-radius: 8px;
   cursor: pointer;
@@ -953,5 +1071,262 @@ button {
     background-color: #cccccc;
     cursor: not-allowed;
   }
+}
+/* 新增答题回顾样式 */
+.review-container {
+  width: 1200px;
+  margin: 100px auto 200px;
+  padding: 30px;
+}
+
+.review-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.score-summary {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.score-item {
+  text-align: center;
+  padding: 15px 30px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.score-label {
+  display: block;
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.score-value {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.questions-list {
+  margin-top: 30px;
+}
+
+.question-item {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.answer-status {
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.correct-answer .answer-status {
+  color: #2e7d32;
+  background: #e8f5e9;
+}
+
+.wrong-answer .answer-status {
+  color: #c62828;
+  background: #ffebee;
+}
+
+.original-question {
+  margin-bottom: 20px;
+}
+
+.question-text {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #333;
+}
+
+.answer-analysis {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.user-answer, .correct-answer {
+  align-items: center;
+  margin: 10px 0;
+}
+
+.user-option {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.wrong-mark {
+  color: #c62828;
+  margin-left: 5px;
+}
+
+.correct-option {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.explanation {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+}
+
+.explanation h4 {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.options-review {
+  display: grid;
+  gap: 10px;
+}
+
+.option-item {
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.option-item.correct {
+  background: #e8f5e9;
+  border-color: #81c784;
+}
+
+.option-item.selected {
+  background: #e1f5fe;
+  border-color: #4fc3f7;
+}
+
+.option-item.wrong-selected {
+  background: #ffebee;
+  border-color: #ef9a9a;
+}
+
+.review-actions {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-restart {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: white;
+  padding: 12px 30px;
+}
+
+.btn-back {
+  background: #f0f0f0;
+  color: #666;
+  padding: 12px 30px;
+}
+
+@media (max-width: 768px) {
+  .review-container {
+    padding: 20px;
+    margin-top: 80px;
+  }
+
+  .score-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .question-item {
+    padding: 15px;
+  }
+}
+
+
+/* 新增淡入淡出动画 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/* 添加模糊效果 */
+.blur-content {
+  filter: blur(2px);
+  transition: filter 0.3s ease;
+}
+
+/* 调整加载遮罩样式 */
+.loading-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  z-index: 100;
+}
+
+/* 保持原有loader样式不变 */
+
+.loader {
+  text-align: center;
+}
+
+.loader-spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 1000;
+}
+
+.loader-text {
+  color: #1976d2;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 调整课程选择容器定位 */
+.course-select-container {
+  position: relative;  /* 新增定位上下文 */
+  width: 100%;
+  max-width: 1400px;
+  margin: 130px auto 200px;
+  padding: 40px 20px;
 }
 </style>
