@@ -1,9 +1,7 @@
 <template>
+
   <div class="quiz-page">
     <Header :ai="activeIndex = 2" />
-
-    <!-- 添加页面过渡动画 -->
-    <transition :name="transitionName" mode="out-in">
       <!-- 每日挑战入口 -->
       <div v-if="currentStep === 'home'" key="stats" class="stats-container">
         <div class="daily-quiz-section">
@@ -37,10 +35,13 @@
             <div class="leaderboard">
               <h3>学霸排行榜</h3>
               <div class="rank-list">
-                <div v-for="(user, index) in leaderboard" :key="user.id" class="rank-item">
+                <div v-for="(item, index) in pointsRanking" :key="item.userId" class="rank-item">
                   <span class="rank-number">#{{ index + 1 }}</span>
-                  <span class="rank-name">{{ user.name }}</span>
-                  <span class="rank-points">{{ user.points }} 积分</span>
+                  <div class="user-info">
+                    <img :src="item.user.img" alt="头像" class="user-avatar">
+                    <span class="rank-name">{{ item.user.loginName }}</span>
+                  </div>
+                  <span class="rank-points">{{ item.score }} 积分</span>
                 </div>
               </div>
             </div>
@@ -82,6 +83,7 @@
             </button>
           </div>
         </div>
+
       </div>
 
       <!-- 答题主界面 -->
@@ -123,37 +125,53 @@
 
 
         <div class="quiz-actions">
+          <!-- 左边：始终显示的上一题按钮 -->
+          <div class="btn-group">
           <button
-              v-if="currentQuestionIndex > 0"
               @click="prevQuestion"
               class="btn-prev"
+              :disabled="currentQuestionIndex === 0"
           >
             上一题
           </button>
+            <button
+                class="btn-end"
+                @click="endQuiz"
+                :disabled="showFinalScore"
+            >
+              结束答题
+            </button>
+          </div>
+          <div class="action-group">
+            <template v-if="!showResult">
+              <button
+                  v-if="selectedOption !== null"
+                  @click="submitAnswer"
+                  class="btn-submit"
+              >
+                提交答案
+              </button>
+            </template>
+            <template v-else>
+              <button
+                  v-if="currentQuestionIndex < currentQuestions.length - 1"
+                  @click="nextQuestion"
+                  class="btn-next"
+              >
+                下一题
+              </button>
+              <button
+                  v-else
+                  @click="showFinalResult"
+                  class="btn-finish"
+              >
+                查看结果
+              </button>
+            </template>
+          </div>
 
-          <button
-              v-if="!showResult && selectedOption !== null"
-              @click="submitAnswer"
-              class="btn-submit"
-          >
-            提交答案
-          </button>
+          <!-- 右边：始终可用的结束答题按钮 -->
 
-          <button
-              v-if="showResult && currentQuestionIndex < currentQuestions.length - 1"
-              @click="nextQuestion"
-              class="btn-next"
-          >
-            下一题
-          </button>
-
-          <button
-              v-if="showResult && currentQuestionIndex === currentQuestions.length - 1"
-              @click="showFinalResult"
-              class="btn-finish"
-          >
-            查看结果
-          </button>
         </div>
 
         <div v-if="showResult" class="quiz-feedback">
@@ -182,7 +200,7 @@
           </div>
         </div>
       </div>
-    </transition>
+
 
     <Footer v-show="footerShow" />
   </div>
@@ -191,10 +209,7 @@
 <script>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-
-// 导入不同课程的题目
-
-
+import { getAllScore } from '@/api/score.js'
 import {mksQuestions,fillInTheBlanks} from "@/data/mksQuestions";
 import gfzQuestions from "@/data/gfzQuestions";
 import pwfQuestions from "@/data/pwfQuestions";
@@ -217,13 +232,7 @@ export default {
         accuracy: 85,
         streakDays: 7
       },
-      leaderboard: [
-        { id: 1, name: '王立群', points: 3500 },
-        { id: 2, name: '张峰', points: 2980 },
-        { id: 3, name: '沈蓝翔', points: 2450 },
-        { id: 4, name: '李慧珊', points: 1820 },
-        { id: 5, name: '徐璐洁', points: 1560 }
-      ],
+      pointsRanking: [], // 替换原来的leaderboard
       courses: [
         {
           id: 'gfz',
@@ -270,6 +279,7 @@ export default {
   },
   created() {
     // 初始化各课程题目
+    this.fetchRankingData();
     this.allQuestions = {
       gfz: gfzQuestions,
       mks: mksQuestions,
@@ -283,13 +293,19 @@ export default {
     }, 150);
   },
   methods: {
+    async fetchRankingData() {
+      try {
+        const { data } = await getAllScore();
+        this.pointsRanking = data.slice(0, 5); // 取前五名
+      } catch (error) {
+        console.error('获取排行榜数据失败:', error);
+      }
+    },
     selectCourse(courseId) {
       this.selectedCourse = courseId;
     },
     startQuiz() {
       if (!this.selectedCourse) return;
-
-      this.transitionName = 'slide-fade-forward';
       this.currentQuestions = this.allQuestions[this.selectedCourse];
       this.currentStep = 'quiz';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -339,7 +355,6 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     backToCourseSelect() {
-      this.transitionName = 'slide-fade-backward';
       this.currentStep = 'courseSelect';
       this.currentQuestionIndex = 0;
       this.selectedOption = null;
@@ -347,6 +362,15 @@ export default {
       this.score = 0;
       this.showFinalScore = false;
       this.userAnswers = [];
+    },
+    endQuiz() {
+      if (confirm('确定要提前结束答题吗？已答题目将会保留进度。')) {
+        this.showFinalScore = true;
+        // 自动计算当前得分（可选）
+        this.score = this.userAnswers.reduce((acc, ans, index) => {
+          return acc + (ans === this.currentQuestions[index].correctAnswer ? 1 : 0)
+        }, 0);
+      }
     }
   }
 }
@@ -429,7 +453,7 @@ export default {
 .stat-value {
   font-size: 24px;
   font-weight: bold;
-  color: #42b983;
+  color: #1976d2;
 }
 
 .stat-label {
@@ -456,34 +480,43 @@ export default {
   padding: 12px;
   background: #f8f9fa;
   border-radius: 6px;
-  transition: transform 0.2s;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
 }
-
-.rank-item:hover {
-  transform: translateX(5px);
+.user-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
 }
-
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
 .rank-number {
   width: 40px;
   color: #666;
-}
-
-.rank-name {
-  flex: 1;
-  font-weight: 500;
-}
-
-.rank-points {
-  color: #42b983;
   font-weight: bold;
 }
+.rank-name {
+  font-weight: 500;
+  color: #333;
+}
+.rank-points {
+  color: #1976d2;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
 
 .start-quiz-btn {
   display: block;
   margin: 40px auto 0;
   padding: 16px 48px;
   font-size: 1.2rem;
-  background: linear-gradient(135deg, #42b983, #369f6b);
+  background: linear-gradient(135deg,#1976d2, #548abc);
   color: white;
   border: none;
   border-radius: 30px;
@@ -543,7 +576,7 @@ export default {
 }
 
 .course-item.selected {
-  border-color: #42b983;
+  border-color: #1976d2;
   background-color: #f0f9f5;
 }
 
@@ -607,7 +640,7 @@ export default {
 
 .btn-start {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #42b983, #369f6b);
+  background: linear-gradient(135deg, #1976d2, #548abc);
   color: white;
   border: none;
   border-radius: 6px;
@@ -650,7 +683,7 @@ export default {
 
 .progress {
   height: 100%;
-  background-color: #42b983;
+  background-color: #1976d2;
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -846,6 +879,11 @@ button {
   gap: 15px;
   margin-top: 20px;
 }
+.btn-group {
+  display: flex;
+  gap: 15px;
+}
+
 
 @media (max-width: 768px) {
   .stats-wrapper {
@@ -882,6 +920,38 @@ button {
   .result-actions {
     flex-direction: column;
     gap: 10px;
+  }
+  .quiz-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .action-group {
+    display: flex;
+    gap: 15px;
+  }
+
+  .btn-end {
+    background-color: #ff4444;
+    color: white;
+    padding: 12px 24px;
+
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-end:hover:not(:disabled) {
+    background-color: #cc0000;
+    transform: translateY(-2px);
+  }
+
+  .btn-end:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
   }
 }
 </style>

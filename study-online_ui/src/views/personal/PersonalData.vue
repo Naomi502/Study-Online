@@ -1,8 +1,8 @@
 <template>
     <div class="personal-data">
+      <h2 class="page-title">个人信息</h2>
         <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">
-                <span style="font-size: 20px;font-weight: 500;color: #333;">个人信息</span>
                 <el-button v-if="!isChange" style="float: right; padding: 3px 0" type="text" @click="bianji"> <i
                         class="el-icon-edit"></i>
                     编辑</el-button>
@@ -202,6 +202,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.page-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
 /deep/ .el-card__header {
     border: none;
 }
@@ -230,9 +237,11 @@ export default {
 }
 
 .personal-data {
+   max-width: 1200px;
     width: 100%;
     height: 100%;
-    margin-top: -28px;
+    padding: 20px;
+    margin: 0 auto;
 
     .box-card {
         .box {

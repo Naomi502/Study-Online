@@ -1,5 +1,7 @@
 <template>
     <div class="personal-class">
+
+      <h2 class="page-title">我的课程</h2>
         <el-card v-show="list.length != 0" v-for="item in list" :key="item.id" class="box-card" shadow="hover">
             <div class="text">
                 <img width="228px" height="128px" :src="item.lesson.img" alt="">
@@ -76,12 +78,21 @@ export default {
     border: none;
 }
 
+.page-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
 .personal-class {
+  max-width: 1200px;
+  margin: 0 auto;
     width: 100%;
     height: 100%;
     max-height: 85vh;
     overflow: auto;
-    margin-top: -54px;
+    padding: 20px;
     background-color: white;
     position: relative;
     z-index: 999;

@@ -4,6 +4,9 @@
       <h3>{{ prize.name }}</h3>
       <span class="tag" v-if="prize.tag">{{ prize.tag }}</span>
     </div>
+    <div class="prize-card-image" >
+      <img style="width: 269px; height: 160px; border-radius: 10px;":src="prize.image" :alt="prize.name" />
+    </div>
     <div class="prize-content">
       <p class="description" v-if="prize.description">{{ prize.description }}</p>
       <div class="price-section">

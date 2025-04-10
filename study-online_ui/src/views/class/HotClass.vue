@@ -18,17 +18,8 @@
           </el-carousel-item>
         </el-carousel>
 
-        <el-tabs
-            v-model="activeTab"
-            class="responsive-tabs"
-            @tab-click="handleTabClick"
-        >
-          <el-tab-pane label="热门好课" name="hot-courses"></el-tab-pane>
-          <el-tab-pane label="推荐课程" name="recommended-courses"></el-tab-pane>
-          <el-tab-pane label="最新课程" name="new-courses"></el-tab-pane>
-        </el-tabs>
       </div>
-
+      <h2 class="page-title">精选好课</h2>
       <!-- 课程分类导航 -->
       <div class="header">
         <span
@@ -227,6 +218,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.page-title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
 .hot-class {
   padding: 60px 20px;
   max-width: 1400px;
@@ -479,7 +477,7 @@ export default {
     padding: 40px 15px;
 
     .header {
-      margin: 15px 0 30px;
+      margin: 0 auto;
 
       .category-tab {
         padding: 6px 16px;

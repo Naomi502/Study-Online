@@ -11,7 +11,10 @@ export const prizes = [
     {
         name: "省赛无忧班",
         price: "340积分",
+        description: "学习资料",
         originalPrice: "680积分",
+        tag: "课程",
+        timeLeft: "不限时",
         highlight: true,
         buttonText: "领取券",
         image: require('@/assets/4.png')
@@ -19,6 +22,9 @@ export const prizes = [
     {
         name: "国赛通关班",
         price: "211积分",
+        description: "学习资料",
+        tag: "课程",
+        timeLeft: "不限时",
         originalPrice: "470",
         buttonText: "领取券",
         image: require('@/assets/10.png')
@@ -26,6 +32,8 @@ export const prizes = [
     {
         name: "继续教育定制雨伞",
         price: "90积分",
+        tag: "周边",
+        timeLeft: "不限时",
         description: "天要下雨娘要嫁人",
         buttonText: "补差价",
         image: require('@/assets/9.png')
@@ -33,6 +41,8 @@ export const prizes = [
     {
         name: "大神同款书包-斜挎包",
         price: "100积分",
+        tag: "周边",
+        timeLeft: "不限时",
         description: "剩余费322",
         buttonText: "立即领取",
         image: require('@/assets/8.png')
@@ -41,12 +51,16 @@ export const prizes = [
         name: "墨水笔0.5mm",
         price: "291积分",
         description: "真是好东西",
+        timeLeft: "不限时",
         tag: "新品",
         image: require('@/assets/7.png')
     },
     {
         name: "继续教育定制帆布袋-代码版",
         price: "199积分",
+        tag: "周边",
+        timeLeft: "不限时",
+        description: "放书放文具很合适",
         originalPrice: "299",
         highlight: true,
         buttonText: "立即兑换",
@@ -55,6 +69,7 @@ export const prizes = [
     {
         name: "专属便携风扇",
         price: "599积分",
+        tag: "周边",
         description: "限量版",
         timeLeft: "3天",
         buttonText: "补差价",

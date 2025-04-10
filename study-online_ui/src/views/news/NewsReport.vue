@@ -7,11 +7,11 @@
             <div class="top">
                 <div class="left" v-for="item in hotNews" :key="item.id">
                     <el-card class="box-card" shadow="hover" @click.native="$router.push(`/newDetail/${item.id}`)">
-                        <div class="img">
+                        <div class="img" style="text-align: center;">
                             <span style="position: absolute;background-color: #5584b3;color: #fff;height: 32px;width: 98px;
                                 text-align: center;line-height: 32px;font-size: 14px;">{{
                                     item.time.slice(0, 10) }}</span>
-                            <img width="100%" :src="item.img" alt="" srcset="">
+                            <img width="700px" height="450px" :src="item.img" alt="" srcset="">
                         </div>
                         <div class="describe">
                             <span style="font-size: 16px; color: #0068b7;padding-top: 8px;padding-left: 15px;">{{ item.title

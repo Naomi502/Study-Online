@@ -13,7 +13,7 @@
                 <el-collapse v-model="activeNames" @change="handleChange">
                     <el-collapse-item title="新闻简介" name="1">
                         <div>{{ newsDetail.remark }}</div>
-                        <div style="width: 100%; margin: 15px auto;">
+                        <div style="width: 100%; margin: 15px auto; text-align: center;">
                             <img v-if="newsDetail.img" :src="newsDetail.img" style="text-align: center;
                             -webkit-filter: drop-shadow(10px 10px 10px rgba(0,0,0,.5)); 
                             filter: drop-shadow(10px 10px 10px rgba(0,0,0,.5));

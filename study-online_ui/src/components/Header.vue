@@ -2,7 +2,7 @@
     <div>
         <div class="header">
             <img @click="$router.push('/')" width="auto" height="40px" style="margin-top: 25px;"
-                src="https://study-onlne.oss-cn-nanjing.aliyuncs.com/study-online-LOGO.png" alt="">
+                src="/study-online-LOGO.png" alt="">
             <el-menu style="margin-top: 15px;" :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
                 @select="handleSelect">
                 <el-menu-item index="1" @click="$router.push('/')">首页</el-menu-item>
@@ -72,7 +72,7 @@ export default {
             dialogVisible: false,
             dialogVisible2: false,
             userName: localStorage.getItem('userName'),
-            circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+            circleUrl: "/user.png",
             imgFile: ''
         };
     },
@@ -241,10 +241,10 @@ export default {
 }
 @keyframes slideDown {
   from {
-    transform: translateY(-100%);
+    transform: translateY(0%);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0%);
   }
 }
 
@@ -272,6 +272,7 @@ export default {
     padding: 0;
 }
 
+
 /deep/ .el-menu--horizontal>.el-submenu .el-submenu__title {
     height: 50px;
 }
@@ -286,4 +287,12 @@ export default {
     text-align: center;
     border-bottom: 1px solid #ebeef5;
 }
+.el-submenu__icon-arrow {
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 15px;
+}
+
+
 </style>

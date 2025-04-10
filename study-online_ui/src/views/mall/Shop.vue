@@ -111,8 +111,8 @@ export default {
 .container {
   position: relative;
   max-width: 1400px;
-  margin: 200px auto;
-  padding: 20px;
+  margin: 140px auto;
+  padding: 10px;
 }
 
 .section-title {
@@ -127,6 +127,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 50px;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 </style>
