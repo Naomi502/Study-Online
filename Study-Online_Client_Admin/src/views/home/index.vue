@@ -171,8 +171,8 @@
         <div style="display:flex;margin-top:40px">
           <el-button type="success" @click="$router.push('/lesson/addLesson')">go~添加课程</el-button>
           <el-button type="warning" style="margin-left:30px" @click="$router.push('/news/addNews')">go~发布新闻</el-button>
+          <el-button type="warning" style="margin-left:30px" @click="goToHome">go~Web首页</el-button>
         </div>
-        <el-divider content-position="right">by isla</el-divider>
       </div>
     </div>
   </div>
@@ -259,6 +259,9 @@ export default {
   },
 
   methods: {
+    goToHome() {
+      window.location.href='http://localhost:8080/'
+    },
     getEcharts() {
       getMyCategoryCount(this.teacherId).then(({ data: res }) => {
         const echarts1 = echarts.init(this.$refs.echarts1)

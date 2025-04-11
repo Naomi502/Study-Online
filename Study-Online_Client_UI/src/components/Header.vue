@@ -109,7 +109,7 @@ export default {
     },
     methods: {
         goToAdmin() {
-          window.location.href='http://study-online-admin.yzkor.com'
+          window.location.href='http://localhost:9528/'
         },
         ...mapMutations(['SETUSERID', 'SETSEARCH']),
         customFunc() {

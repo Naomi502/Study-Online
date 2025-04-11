@@ -6,7 +6,7 @@
         <!-- <h1 class="sidebar-title">{{ title }} </h1> -->
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img src="https://study-onlne.oss-cn-nanjing.aliyuncs.com/study-online-LOGO.png" width="135px" class="sidebar-logo">
+        <img src="/study-online-LOGO.png" width="135px" class="sidebar-logo">
         <!-- <h1 class="sidebar-title">{{ title }} </h1> -->
       </router-link>
     </transition>
