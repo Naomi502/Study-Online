@@ -9,6 +9,12 @@ module.exports = defineConfig({
             return args;
         })
 },
+    devServer: {
+        open: true,
+        host: 'localhost',
+        port: 8080,
+        https: false,
+    },
   lintOnSave: false
 })
 
