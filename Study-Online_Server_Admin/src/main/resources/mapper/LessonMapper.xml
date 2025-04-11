@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.LessonMapper">
+    <select id="selectLessonPage" resultType="com.jd.entity.Lesson">
+        select l.id, l.l_name, l.lesson_type_id,l.Time, l.Dian_Ji,l.img,l.Remark,l.School,hc.name as categoryName,t.t_name
+        from lesson l
+        left join teacher t on l.teacher_id = t.id
+        left join hot_category hc on hc.id=l.Lesson_Type_Id
+        where 1 = 1
+        <if test="query.lName != null and query.lName != ''">
+            and l.l_name like concat('%', #{query.lName}, '%')
+        </if>
+        <if test="query.lessonTypeId != null">
+            and l.lesson_type_id = #{query.lessonTypeId}
+        </if>
+        <if test="query.tName != null and query.tName != ''">
+            and t.t_name like concat('%', #{query.tName}, '%')
+        </if>
+    </select>
+
+    <select id="getLessonById" resultType="com.jd.entity.Lesson">
+        select l.*,t.T_Name from lesson l INNER join teacher t on l.teacher_id = t.Id
+        where l.Id=#{id}
+    </select>
+
+    <select id="getCategoryCount" resultType="com.jd.entity.MyCategoryCount">
+        select c.name as name,COUNT(l.id) AS value from lesson l
+        left join hot_category c on l.Lesson_Type_Id=c.id
+        where l.teacher_id=#{id}
+        GROUP BY c.name
+    </select>
+
+</mapper>

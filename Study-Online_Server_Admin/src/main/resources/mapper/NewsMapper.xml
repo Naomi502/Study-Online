@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.NewsMapper">
+    <resultMap id="orderMap4" type="com.jd.entity.News">
+        <result property="id" column="id"/>
+        <result property="isHot" column="is_hot"/>
+        <result property="title" column="Title"/>
+        <result property="time" column="Time"/>
+        <result property="img" column="img"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="dianJi" column="Dian_Ji"/>
+        <result property="content" column="Content"/>
+        <result property="remark" column="Remark"/>
+        <result property="isAudit" column="is_audit"/>
+        <association property="teacher" >
+            <result column="T_Name" property="tName" javaType="String"></result>
+        </association>
+    </resultMap>
+    <select id="getNewsDetail" resultMap="orderMap4">
+        select n.Id, n.Time, n.is_hot,n.Title ,n.Img,n.Dian_Ji,n.Content,n.Remark, n.is_audit,t.T_Name
+        from news as n
+        left join teacher as t on n.teacher_id = t.id
+        where n.Id=#{id};
+    </select>
+
+    <select id="selectNewsByUserName" resultType="com.jd.entity.News">
+        SELECT n.Id,n.Title,n.is_hot,n.Time,n.Img ,n.Dian_Ji,n.teacher_id,n.is_audit,t.T_Name
+        FROM news n INNER JOIN teacher t
+        ON  n.teacher_id=t.id WHERE 1=1
+        <if test="name != null">
+        AND t.T_Name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </select>
+
+    <select id="selectNoAuditNews" resultType="com.jd.entity.News">
+        SELECT n.Id,n.Title,n.is_hot,n.Time,n.Img ,n.Dian_Ji,n.teacher_id,n.is_audit,t.T_Name
+        FROM news n INNER JOIN teacher t
+        ON  n.teacher_id=t.id WHERE n.is_audit=0
+    </select>
+
+</mapper>

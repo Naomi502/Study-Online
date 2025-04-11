@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.CommentMapper">
+    <select id="selectCommentByUserName" resultType="com.jd.entity.Comment">
+        SELECT c.Id,c.Content,c.Zan,c.Time,c.User_Id ,c.parent_id,u.Login_Name FROM comment c
+        INNER JOIN user u ON c.User_Id=u.id
+        WHERE 1=1
+        <if test="name != null">
+            AND u.Login_Name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </select>
+
+    <delete id="deleteCommentsById" parameterType="java.util.List">
+        delete from comment where id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 级联删除 -->
+    <delete id="deleteCommentsByParentId" parameterType="java.lang.Long">
+        delete from comment where parent_id = #{parentId}
+    </delete>
+</mapper>
+

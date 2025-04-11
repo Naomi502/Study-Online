@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.ScoreMapper">
+    <select id="selectScoreByUserName" resultType="com.jd.entity.Score">
+        SELECT s.*, u.Login_Name FROM score s INNER JOIN user u ON s.User_Id=u.id
+        WHERE 1=1
+        <if test="name != null">
+        AND u.Login_Name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </select>
+</mapper>

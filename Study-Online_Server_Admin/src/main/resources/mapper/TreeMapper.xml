@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jd.mapper.TreeMapper">
+    <select id="getTree" resultType="com.jd.entity.Tree">
+        select  t.id, name, parent_id pid, level, introduce, lesson_id,v.Link,v.Id as videoId from tree t
+        left join video as v on v.tree_id = t.id
+        where t.lesson_id=#{id}
+    </select>
+</mapper>
