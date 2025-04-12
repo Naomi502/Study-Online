@@ -41,14 +41,14 @@
         <!-- 版权信息 -->
         <div class="footer-bottom">
           <div class="copyright">
-            <p>版权所有：扬州市职业大学（扬州开放大学） ©2024</p>
+            <p>版权所有：XXXXXXXX继续教育 ©2024</p>
             <div class="legal-links">
               <span>苏ICP备13024625号-3</span>
               <span>京公网安备 11010802033054号</span>
               <span>苏公网安备32100302010583号</span>
             </div>
             <div class="address">
-              <i class="el-icon-location-outline"></i>扬州市邗江区文昌西路458号
+              <i class="el-icon-location-outline"></i>扬州市邗江区市政厅行政楼继续教育学院
             </div>
           </div>
           <div class="security">

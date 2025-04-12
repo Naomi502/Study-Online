@@ -26,23 +26,8 @@
                 required
             >
           </div>
-          <div class="form-group">
-            <label>收货地址</label>
-            <textarea
-                v-model="form.address"
-                placeholder="请输入详细地址"
-                rows="3"
-                required
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label>邮政编码</label>
-            <input
-                type="text"
-                v-model="form.postcode"
-                placeholder="请输入邮编"
-            >
-          </div>
+
+
           <div class="form-actions">
             <button type="button" class="cancel-btn" @click="close">取消</button>
             <button type="submit" class="submit-btn">确认兑换</button>
@@ -98,10 +83,7 @@ export default {
         alert('请输入正确的手机号码');
         return false;
       }
-      if (!this.form.address.trim()) {
-        alert('请输入详细地址');
-        return false;
-      }
+
       return true;
     },
     resetForm() {
@@ -127,7 +109,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 1000;
 }
 
 .modal-container {
@@ -193,7 +175,7 @@ export default {
 
 .form-group input,
 .form-group textarea {
-  width: 96%;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;

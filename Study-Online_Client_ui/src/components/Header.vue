@@ -12,7 +12,7 @@
 
                 <el-submenu index="7">
                     <template slot="title">更多</template>
-                    <el-menu-item index="7-1">企业服务</el-menu-item>
+                    <el-menu-item index="7-1" @click="messageshow">企业服务</el-menu-item>
                     <el-menu-item index="7-2">高职课程</el-menu-item>
                     <el-menu-item index="7-3"@click="goToAdmin" >管理平台</el-menu-item>
                     <el-menu-item index="7-4" style="border: none;">工商管理专业学位研究生</el-menu-item>
@@ -108,6 +108,12 @@ export default {
         ...mapGetters(['userId'])
     },
     methods: {
+        messageshow() {
+            this.$message({
+                message: '企业服务暂未开通，敬请期待！',
+                type: 'warning'
+            } );
+        },
         goToAdmin() {
           window.location.href='http://localhost:9528/'
         },

@@ -502,8 +502,8 @@ export default {
 .daily-quiz-section {
   width: 100%;
   max-width: 1200px;
-  height: 800px;
-  margin: 130px auto 0;
+  height: 600px;
+  margin: 100px auto 0;
   margin-bottom: 200px;
   padding: 40px 20px;
 }
@@ -649,8 +649,8 @@ export default {
 .course-select-container {
   width: 100%;
   max-width: 1400px;
-  height: 800px;
-  margin: 130px auto 0;
+  height: 600px;
+  margin: 100px auto 0;
   margin-bottom: 200px;
   padding: 40px 20px;
 }

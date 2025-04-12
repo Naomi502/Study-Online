@@ -14,7 +14,7 @@
         <!-- <el-form-item label="教师名称">
           <el-input v-model="formInline.tName" placeholder="请输入教师"></el-input>
         </el-form-item> -->
-        <el-form-item label="商品分类" label-width="120px">
+        <el-form-item label="课程分类" label-width="120px">
           <el-select v-model="categoryFirst" placeholder="全部">
             <el-option v-for="item in formInline.category" @click.native="handleSelectTeam(item.id)" :key="item.id"
               :label="item.name" :value="item.id"></el-option>

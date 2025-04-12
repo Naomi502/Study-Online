@@ -66,10 +66,10 @@ export default {
     },
     getStatusText(status) {
       const textMap = {
-        1: '待发货',
-        2: '已发货',
-        3: '运输中',
-        4: '已完成'
+
+        1: '待领取',
+
+        2: '已领取'
       }
       return textMap[status] || '未知状态'
     },
@@ -90,6 +90,11 @@ export default {
     },
     viewLogistics(id) {
       this.$message.info(`查看ID为${id}的物流信息`);
+    },
+    deleteAllExchanges() {
+      localStorage.removeItem('exchangeList');
+      this.exchangeList = [];
+      this.$message.success('所有兑换记录已删除');
     }
   }
 }

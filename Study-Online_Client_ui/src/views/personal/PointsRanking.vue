@@ -33,7 +33,10 @@
                   :src="scope.row.user?.img"
                   class="user-avatar"
               />
-              <span class="username">{{ scope.row.user?.loginName }}</span>
+              <!-- 使用固定宽度的容器并设置文本对齐方式 -->
+              <div class="username-container" style="width: 100px; text-align: center;">
+                <span class="username">{{ scope.row.user?.loginName }}</span>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -139,64 +142,64 @@
 <script>
 import { getAllScore, getMyScore, getScoreDetail } from '@/api/score.js'
 export default {
-    name: 'StudyOnlinePointsRanking',
+  name: 'StudyOnlinePointsRanking',
 
-    data() {
-        return {
-            list: [],
-            myList: {},
-            scoreDetail: [],
-            img: '',
-            score: '',
-            loginName: '',
-            time: '',
-            sort: '',
-            userId: localStorage.getItem('userId'),
-            dialogTableVisible: false
-        };
+  data() {
+    return {
+      list: [],
+      myList: {},
+      scoreDetail: [],
+      img: '',
+      score: '',
+      loginName: '',
+      time: '',
+      sort: '',
+      userId: localStorage.getItem('userId'),
+      dialogTableVisible: false
+    };
+  },
+
+  mounted() {
+    this.getAllScore()
+  },
+
+  methods: {
+    getAllScore() {
+      getAllScore().then(({ data: res }) => {
+        // console.log(res);
+        this.list = res
+      })
+      getMyScore(this.userId).then(({ data: res }) => {
+        // this.myList = res
+        this.img = res.user.img
+        this.score = res.score
+        this.loginName = res.user.loginName
+        this.time = res.time
+        // console.log(this.myList);
+      })
+      getScoreDetail(this.userId).then(({ data: res }) => {
+        this.scoreDetail = res
+      })
     },
+    tableRowClassName({
+                        row,
+                        rowIndex
+                      }) {
+      if (row.userId == this.userId) {
+        this.sort = rowIndex + 1
+      }
+      // console.log(row, 'row');
+      if (rowIndex === 0) {
+        return 'first';
+      } else if (rowIndex === 1) {
+        return 'second';
+      } else if (rowIndex === 2) {
+        return 'third';
+      }
+      return '';
+    }
 
-    mounted() {
-        this.getAllScore()
-    },
-
-    methods: {
-        getAllScore() {
-            getAllScore().then(({ data: res }) => {
-                // console.log(res);
-                this.list = res
-            })
-            getMyScore(this.userId).then(({ data: res }) => {
-                // this.myList = res
-                this.img = res.user.img
-                this.score = res.score
-                this.loginName = res.user.loginName
-                this.time = res.time
-                // console.log(this.myList);
-            })
-            getScoreDetail(this.userId).then(({ data: res }) => {
-                this.scoreDetail = res
-            })
-        },
-        tableRowClassName({
-            row,
-            rowIndex
-        }) {
-            if (row.userId == this.userId) {
-                this.sort = rowIndex + 1
-            }
-            // console.log(row, 'row');
-            if (rowIndex === 0) {
-                return 'first';
-            } else if (rowIndex === 1) {
-                return 'second';
-            } else if (rowIndex === 2) {
-                return 'third';
-            }
-            return '';
-        }
-
-    },
+  },
 };
 </script>
 

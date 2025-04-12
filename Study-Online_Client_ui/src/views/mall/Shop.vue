@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Header :ai="activeIndex = 3" />
+    <Header :active-index="3" />
     <div class="container animated-container">
       <h2 class="section-title">积分商城</h2>
       <div class="prize-grid">
@@ -54,6 +54,8 @@ export default {
     },
     async handleSubmit(formData) {
       try {
+
+        console.log('开始兑换', formData); // 调试信息
         const exchangeList = JSON.parse(localStorage.getItem('exchangeList')) || [];
         const newExchangeItem = {
           id: Date.now(),
@@ -68,11 +70,11 @@ export default {
             address: formData.address
           }
         };
-
         exchangeList.unshift(newExchangeItem);
         localStorage.setItem('exchangeList', JSON.stringify(exchangeList));
+        console.log('本地存储完成'); // 调试信息
+        this.$message(`兑换成功！兑换短信将发送至：${formData.phone}`);
 
-        this.$message.success(`兑换成功！商品将发货至：${formData.address}`);
       } catch (error) {
         console.error('兑换失败:', error);
         this.$message.error('兑换失败，请稍后重试');
@@ -86,7 +88,7 @@ export default {
 
 <style scoped>
 .app {
-  z-index: 5000;
+  z-index: 0;
   background-color: #ffffff;
   position: relative;
 }
@@ -111,8 +113,8 @@ export default {
 .container {
   position: relative;
   max-width: 1400px;
-  margin: 140px auto;
-  padding: 10px;
+  margin: 200px auto;
+  padding: 20px;
 }
 
 .section-title {
@@ -127,6 +129,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 50px;
-  padding: 10px 0;
+  padding: 20px 0;
 }
 </style>
