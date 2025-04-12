@@ -206,7 +206,7 @@ export default {
     }
 
     .left {
-        width: 15%;
+        width: 12%;
         height: 100%;
         background-color: aqua;
 

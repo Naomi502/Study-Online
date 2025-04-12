@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Header :active-index="3" />
+    <Header :ai="activeIndex = 3" />
     <div class="container animated-container">
       <h2 class="section-title">积分商城</h2>
       <div class="prize-grid">

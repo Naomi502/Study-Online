@@ -45,7 +45,7 @@ export const prizes = [
         image: require('@/assets/8.png')
     },
     {
-        name: "墨水笔0.5mm",
+        name: "软软抱枕",
         price: "999积分",
         description: "真是好东西",
         timeLeft: "不限时",

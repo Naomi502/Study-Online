@@ -68,7 +68,8 @@ export default {
       const textMap = {
 
         1: '待领取',
-
+        3: '已领取',
+        4: '已领取',
         2: '已领取'
       }
       return textMap[status] || '未知状态'

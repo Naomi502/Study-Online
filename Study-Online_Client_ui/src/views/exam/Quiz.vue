@@ -312,9 +312,9 @@ export default {
       selectedCourse: null,
       fillInQuestions: fillInTheBlanks,
       userStats: {
-        points: 169,
+        points: 2234,
         accuracy: 85,
-        streakDays: 4
+        streakDays: 22
       },
       pointsRanking: [], // 替换原来的leaderboard
       courses: [
